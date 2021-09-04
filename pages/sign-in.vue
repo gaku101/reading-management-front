@@ -106,6 +106,7 @@ export default defineComponent({
       })
       console.log('res', data)
       if (data.access_token) {
+        localStorage.setItem('token', data.access_token)
         root.$router.push('/')
       }
     }
