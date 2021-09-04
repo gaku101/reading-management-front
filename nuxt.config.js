@@ -18,7 +18,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: ['@/plugins/composition-api'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -38,11 +38,19 @@ export default {
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
+    '@nuxtjs/proxy',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
-
+  axios: { proxy: true },
+  proxy: {
+    '/api/': {
+      target: 'http://localhost:8080',
+      pathRewrite: {
+        '^/api/': '/',
+      },
+    },
+  },
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     manifest: {
