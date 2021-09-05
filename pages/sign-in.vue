@@ -97,17 +97,25 @@ export default defineComponent({
       username: '',
       password: '',
     })
+    localStorage.removeItem('token')
+    localStorage.removeItem('username')
     /** サインイン */
     const signIn = async () => {
       console.log('userInfo', userInfo.username, userInfo.password)
-      const { data } = await root.$axios.post('/api/users/login', {
-        username: userInfo.username,
-        password: userInfo.password,
-      })
-      console.log('res', data)
-      if (data.access_token) {
-        localStorage.setItem('token', data.access_token)
-        root.$router.push('/')
+      try {
+        const { data } = await root.$axios.post('/api/users/login', {
+          username: userInfo.username,
+          password: userInfo.password,
+        })
+        console.log('res', data)
+        if (data.access_token) {
+          await root.$store.dispatch('user/setUser', userInfo.username)
+          localStorage.setItem('token', data.access_token)
+          localStorage.setItem('username', data.user.username)
+          root.$router.push('/')
+        }
+      } catch (e) {
+        console.error(e)
       }
     }
     return {

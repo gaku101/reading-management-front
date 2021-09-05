@@ -18,9 +18,10 @@
           <a class="inline-block hover:text-white"> Favorites </a>
         </div>
         <div>
-          <span v-if="owner">Welcome {{ owner }}</span>
-          <a
+          <span v-if="username">Welcome {{ username }}</span>
+          <NuxtLink
             v-else
+            to="/sign-in"
             class="
               inline-block
               text-sm
@@ -34,8 +35,9 @@
               hover:text-teal-500
               hover:bg-white
             "
-            >SignIn</a
           >
+            SignIn
+          </NuxtLink>
         </div>
       </div>
     </nav>
@@ -43,23 +45,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api'
+import { defineComponent, computed } from '@vue/composition-api'
 
 export default defineComponent({
-  name: 'SignIn',
+  name: 'Index',
   setup(_, { root }) {
-    const owner = ref('')
-    const getAccount = async () => {
-      const { data } = await root.$axios.get('/api/accounts/1')
-      console.log('res', data)
-      if (data) {
-        owner.value = data.owner
-      }
-    }
-    getAccount()
+    const username = computed(() => root.$store.getters['user/username'])
     return {
-      getAccount,
-      owner,
+      username,
     }
   },
 })

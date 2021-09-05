@@ -51,6 +51,9 @@ export default {
       },
     },
   },
+  router: {
+    middleware: ['checkAuthentication'],
+  },
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     manifest: {
