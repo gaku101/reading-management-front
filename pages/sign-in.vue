@@ -56,6 +56,7 @@
             type="password"
             placeholder="*****"
             v-model="userInfo.password"
+            @keypress.enter="signIn"
           />
         </div>
         <div>
