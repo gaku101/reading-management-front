@@ -9,11 +9,11 @@ export default async ({ $axios, store, route, redirect }: any) => {
   console.log('middleware', username)
   if (!username) {
     username = localStorage.getItem('username')
-    await store.dispatch('user/setUser', username)
   }
   try {
     const { data } = await $axios.get(`/api/users/${username}`)
     console.log('getUser', data)
+    await store.dispatch('user/setUser', data.user)
   } catch (e) {
     console.error(e)
     redirect('/sign-in')
