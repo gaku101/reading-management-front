@@ -7,7 +7,28 @@
         alt="Profile image"
       />
       <div v-if="username" class="col-span-3 mt-6 text-2xl">{{ username }}</div>
-      <div v-if="points" class="col-span-3 mt-6 text-md text-blue-400">Newbie | {{ points }} points</div>
+      <button
+        class="
+          col-span-3
+          bg-transparent
+          hover:bg-blue-400
+          text-blue-400
+          text-xs
+          font-semibold
+          hover:text-white
+          py-1
+          px-4
+          border border-blue-300
+          hover:border-transparent
+          rounded-lg
+          mt-3
+        "
+      >
+        Edit Profile
+      </button>
+      <div v-if="points" class="col-span-3 mt-6 text-md text-blue-400">
+        Newbie | {{ points }} points
+      </div>
     </div>
   </div>
 </template>
