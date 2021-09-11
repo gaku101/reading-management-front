@@ -83,6 +83,7 @@
             id="profile"
             type="text"
             placeholder="Profile"
+            v-model="userInfo.profile"
           />
         </div>
         <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
@@ -108,6 +109,7 @@
               sm:w-auto
               sm:text-sm
             "
+            @click="updateUser"
           >
             Update
           </button>
@@ -137,7 +139,7 @@
             "
             @click="cancelAction"
           >
-            Cancel
+            Close
           </button>
         </div>
       </div>
@@ -145,7 +147,14 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, computed, ref, watch } from '@vue/composition-api'
+import {
+  defineComponent,
+  computed,
+  ref,
+  watch,
+  PropType,
+  reactive,
+} from '@vue/composition-api'
 
 export default defineComponent({
   name: 'EditProfile',
@@ -158,9 +167,40 @@ export default defineComponent({
       type: Function,
       required: true,
     },
+    user: {
+      type: Object as PropType<UserState>,
+      required: true,
+    },
   },
-  setup(_, { root }) {
-    return {}
+  setup(props, { root }) {
+    const userInfo: UserState = reactive({
+      id: 0,
+      username: '',
+      password: '',
+      profile: '',
+      image: '',
+    })
+    Object.assign(userInfo, props.user)
+    const updateUser = async () => {
+      console.log('props.user', props.user)
+      console.log('userInfo', userInfo)
+      try {
+        const { data } = await root.$axios.post('/api/users/update', {
+          id: props.user.id,
+          username: props.user.username,
+          profile: userInfo.profile,
+          image: userInfo.image,
+        })
+        console.log('data', data)
+        Object.assign(props.user, userInfo)
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    return {
+      userInfo,
+      updateUser,
+    }
   },
 })
 </script>

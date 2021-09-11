@@ -24,6 +24,4 @@ export const actions: ActionTree<RootState, RootState> = {
   async setUser({ commit }, user: UserState) {
     commit('setUser', user)
   },
-  async signOut({ commit }) {},
-  async getUser({ commit }, username: string) {},
 }

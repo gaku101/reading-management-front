@@ -110,7 +110,7 @@ export default defineComponent({
         })
         console.log('res', data)
         if (data.access_token) {
-          await root.$store.dispatch('user/setUser', userInfo.username)
+          await root.$store.dispatch('user/setUser', data.user)
           localStorage.setItem('token', data.access_token)
           localStorage.setItem('username', data.user.username)
           root.$router.push('/')

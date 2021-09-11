@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-12 p-6">
+  <div class="mt-20">
     <div class="text-2xl">Index</div>
   </div>
 </template>

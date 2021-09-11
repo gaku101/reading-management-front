@@ -1,12 +1,13 @@
 <template>
-  <div class="max-w-md container mx-auto">
-    <div class="grid grid-cols-3 place-items-center mt-10">
+  <div class="max-w-md container mx-auto mt-20">
+    <div class="grid grid-cols-3 place-items-center">
       <img
         class="col-span-3 w-24 h-24 rounded-full"
         src="~assets/profile.jpg"
         alt="Profile image"
       />
       <div v-if="username" class="col-span-3 mt-6 text-2xl">{{ username }}</div>
+      <div v-if="user" class="col-span-3 mt-3 text-md">{{ user.profile }}</div>
       <button
         class="
           col-span-3
@@ -33,6 +34,7 @@
     <EditProfile
       :is-opened="isOpenedEditProfile"
       :cancel-action="() => (isOpenedEditProfile = false)"
+      :user="user"
     />
   </div>
 </template>
@@ -57,6 +59,7 @@ export default defineComponent({
     }
     getAccount()
     return {
+      user,
       username,
       points,
       isOpenedEditProfile,
