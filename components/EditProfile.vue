@@ -149,7 +149,6 @@
 <script lang="ts">
 import {
   defineComponent,
-  PropType,
   reactive,
 } from '@vue/composition-api'
 
@@ -165,7 +164,7 @@ export default defineComponent({
       required: true,
     },
     user: {
-      type: Object as PropType<UserState>,
+      type: Object as () => UserState,
       required: true,
     },
   },
