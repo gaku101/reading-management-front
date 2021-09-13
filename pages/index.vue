@@ -92,7 +92,6 @@
 
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api'
-import dayjs from 'dayjs'
 
 export default defineComponent({
   name: 'Index',
