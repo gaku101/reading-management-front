@@ -5,3 +5,10 @@ declare interface UserState {
   profile: string
   image: string
 }
+
+declare interface Post {
+  id: number
+  author: string
+  title: string
+  body: string
+}
