@@ -28,7 +28,7 @@
         Edit Profile
       </button>
       <div v-if="points" class="col-span-3 mt-6 text-md text-blue-400">
-        Newbie | {{ points }} points
+        Newbie&nbsp;&nbsp;|&nbsp;&nbsp;{{ points }} points
       </div>
     </div>
     <EditProfile
