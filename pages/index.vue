@@ -22,20 +22,20 @@
           >
             <div class="p-4">
               <span
+                v-if="post.category.id"
                 class="
                   inline-block
                   px-2
                   py-1
                   leading-none
-                  bg-yellow-200
-                  text-yellow-800
                   rounded-full
                   font-semibold
                   uppercase
                   tracking-wide
                   text-xs
                 "
-                >Category</span
+                :class="categoryColor(post.category.id)"
+                >{{ post.category.name }}</span
               >
               <h2 class="mt-2 mb-2 font-bold">
                 {{ post.title }}
@@ -81,7 +81,7 @@
             <div
               class="p-4 flex items-center text-sm text-gray-600 justify-end"
             >
-              {{ $dayjs(post.created_at).format('YYYY/MM/DD HH:mm')}}
+              {{ $dayjs(post.created_at).format('YYYY/MM/DD HH:mm') }}
             </div>
           </a>
         </div>
@@ -106,9 +106,20 @@ export default defineComponent({
       posts.value = data
       console.log('posts', posts.value)
     }
+    const categoryColor = (id: number) => {
+      switch (id) {
+        case 1:
+          return 'bg-yellow-200 text-yellow-800'
+        case 2:
+          return 'bg-blue-200 text-blue-800'
+        default:
+          return 'bg-red-200 text-red-800'
+      }
+    }
     listPosts()
     return {
       posts,
+      categoryColor,
     }
   },
 })

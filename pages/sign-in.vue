@@ -93,6 +93,7 @@ interface UserInfo {
 
 export default defineComponent({
   name: 'SignIn',
+  layout: 'no-header',
   setup(_, { root }) {
     const userInfo: UserInfo = reactive({
       username: '',
