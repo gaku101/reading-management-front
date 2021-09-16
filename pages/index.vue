@@ -1,6 +1,70 @@
 <template>
-  <div class="mt-20">
+  <div class="pt-20">
     <div class="text-2xl">Posts</div>
+    <div class="mx-2">
+      <textarea
+        name=""
+        id=""
+        rows="10"
+        class="block w-full mx-auto mt-8 p-3 bgGray"
+        placeholder="Write here..."
+        autofocus
+      ></textarea>
+      <div class="my-6 sm:flex sm:flex-row-reverse">
+        <button
+          type="button"
+          class="
+            w-full
+            inline-flex
+            justify-center
+            rounded-md
+            border border-transparent
+            shadow-sm
+            px-4
+            py-2
+            bg-blue-500
+            text-base
+            font-medium
+            text-white
+            hover:bg-blue-600
+            focus:outline-none
+            focus:ring-2 focus:ring-offset-2 focus:ring-red-500
+            sm:ml-3
+            sm:w-auto
+            sm:text-sm
+          "
+        >
+          Update
+        </button>
+        <button
+          type="button"
+          class="
+            mt-3
+            w-full
+            inline-flex
+            justify-center
+            rounded-md
+            border border-gray-300
+            shadow-sm
+            px-4
+            py-2
+            bg-white
+            text-base
+            font-medium
+            text-gray-700
+            hover:bg-gray-50
+            focus:outline-none
+            focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+            sm:mt-0
+            sm:ml-3
+            sm:w-auto
+            sm:text-sm
+          "
+        >
+          Close
+        </button>
+      </div>
+    </div>
     <div class="container mx-auto">
       <div class="flex flex-wrap -mx-4">
         <div
@@ -125,4 +189,10 @@ export default defineComponent({
 })
 </script>
 <style scoped>
+textarea:valid {
+  outline: none;
+}
+.bgGray {
+  background-color: #fafafa;
+}
 </style>
