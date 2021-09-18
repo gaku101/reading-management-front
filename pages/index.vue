@@ -1,15 +1,57 @@
 <template>
   <div class="pt-20">
-    <div class="text-2xl">Posts</div>
-    <div class="mx-2">
+    <div class="flex items-center">
+      <div class="text-2xl">Posts</div>
+      <svg
+        v-if="!isOpenedEditor"
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6 ml-3 text-gray-700"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        @click="openEditor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+    </div>
+    <div>
+      <div class="group mt-4 bgGray w-4/12">
+        <input
+          class="bgGray"
+          id="text3"
+          type="text"
+          placeholder="Write title here..."
+          autofocus
+          v-model="title"
+        />
+        <div class="text_underline"></div>
+      </div>
       <textarea
-        name=""
-        id=""
         rows="10"
-        class="block w-full mx-auto mt-8 p-3 bgGray"
-        placeholder="Write here..."
-        autofocus
+        class="block w-full mx-auto mt-8 bgGray"
+        placeholder="Write body here..."
+        v-model="body"
       ></textarea>
+      <div class="selectbox">
+        <select
+          name="category"
+          class="bgGray"
+          v-model="selectedCategory"
+        >
+          <option
+            v-for="category in categories"
+            :key="category.id"
+            :value="category.id"
+          >
+            {{ category.name }}
+          </option>
+        </select>
+      </div>
       <div class="my-6 sm:flex sm:flex-row-reverse">
         <button
           type="button"
@@ -33,8 +75,9 @@
             sm:w-auto
             sm:text-sm
           "
+          @click="createPost"
         >
-          Update
+          Send
         </button>
         <button
           type="button"
@@ -60,13 +103,14 @@
             sm:w-auto
             sm:text-sm
           "
+          @click="closeEditor"
         >
-          Close
+          Cancel
         </button>
       </div>
     </div>
     <div class="container mx-auto">
-      <div class="flex flex-wrap -mx-4">
+      <div class="flex flex-wrap mx-4">
         <div
           v-for="post in posts"
           :key="post.id"
@@ -155,12 +199,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api'
+import { defineComponent, ref, computed } from '@vue/composition-api'
 
 export default defineComponent({
   name: 'Index',
   setup(_, { root }) {
-    const pageId = 1
+    const username = computed(() => root.$store.getters['user/username'])
+    const pageId = 2
     const pageSize = 10
     const posts = ref<Post[]>()
     const listPosts = async () => {
@@ -170,6 +215,14 @@ export default defineComponent({
       posts.value = data
       console.log('posts', posts.value)
     }
+    listPosts()
+    const categories = ref()
+    const selectedCategory = ref(1)
+    const listCategories = async () => {
+      const { data } = await root.$axios.get(`/api/category`)
+      categories.value = data
+    }
+    listCategories()
     const categoryColor = (id: number) => {
       switch (id) {
         case 1:
@@ -180,19 +233,94 @@ export default defineComponent({
           return 'bg-red-200 text-red-800'
       }
     }
-    listPosts()
+    const isOpenedEditor = ref(false)
+    const openEditor = () => {
+      isOpenedEditor.value = true
+    }
+    const closeEditor = () => {
+      isOpenedEditor.value = false
+    }
+    const title = ref('')
+    const body = ref('')
+    const createPost = async () => {
+      try {
+        console.log('username', username)
+        const { data } = await root.$axios.post('/api/posts', {
+          author: username.value,
+          title: title.value,
+          body: body.value,
+          category: selectedCategory.value,
+        })
+        listPosts()
+        isOpenedEditor.value = false
+      } catch (e) {
+        console.error(e)
+      }
+    }
     return {
       posts,
       categoryColor,
+      openEditor,
+      isOpenedEditor,
+      closeEditor,
+      createPost,
+      title,
+      body,
+      categories,
+      selectedCategory,
     }
   },
 })
 </script>
 <style scoped>
-textarea:valid {
+input {
+  outline: none;
+}
+textarea {
   outline: none;
 }
 .bgGray {
   background-color: #fafafa;
+}
+
+#text3 {
+  font-size: 16px;
+  width: 100%;
+  border: none;
+  outline: none;
+  padding-bottom: 8px;
+  box-sizing: border-box; /*横幅の解釈をpadding, borderまでとする*/
+}
+.text_underline {
+  position: relative; /*.text_underline::beforeの親要素*/
+  border-top: 1px solid #c2c2c2; /*text3の下線*/
+}
+
+/*共通のstyle*/
+.text_underline::before,
+.text_underline::after {
+  position: absolute;
+  bottom: 0px; /*中央配置*/
+  width: 0px; /*アニメーションで0pxから50%に*/
+  height: 1px; /*高さ*/
+  content: '';
+  background-color: #3be5ae; /*アニメーションの色*/
+  transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+}
+
+/*中央から右へのアニメーション*/
+.text_underline::before {
+  left: 50%; /*中央配置*/
+}
+
+/*中央から左へのアニメーション*/
+.text_underline::after {
+  right: 50%; /*中央配置*/
+}
+
+#text3:focus + .text_underline::before,
+#text3:focus + .text_underline::after {
+  width: 50%;
 }
 </style>
