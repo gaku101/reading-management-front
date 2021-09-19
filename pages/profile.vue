@@ -41,11 +41,9 @@
 
 <script lang="ts">
 import { defineComponent, computed, ref } from '@vue/composition-api'
-import EditProfile from '~/components/ProfileEditor.vue'
 
 export default defineComponent({
-  components: { EditProfile },
-  name: 'Index',
+  name: 'Profile',
   setup(_, { root }) {
     const user = computed(() => root.$store.getters['user/user'])
     const username = computed(() => root.$store.getters['user/username'])
