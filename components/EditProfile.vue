@@ -153,7 +153,7 @@ import {
 } from '@vue/composition-api'
 
 export default defineComponent({
-  name: 'EditProfile',
+  name: 'ProfileEditor',
   props: {
     isOpened: {
       type: Boolean,

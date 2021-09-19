@@ -27,6 +27,7 @@
             id="username"
             type="text"
             placeholder="Username"
+            autocomplete="text"
             v-model="userInfo.username"
           />
         </div>
@@ -55,6 +56,7 @@
             id="password"
             type="password"
             placeholder="*****"
+            autocomplete="password"
             v-model="userInfo.password"
             @keypress.enter="signIn"
           />

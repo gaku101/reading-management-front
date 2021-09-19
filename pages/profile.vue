@@ -31,7 +31,7 @@
         Newbie&nbsp;&nbsp;|&nbsp;&nbsp;{{ points }} points
       </div>
     </div>
-    <EditProfile
+    <ProfileEditor
       :is-opened="isOpenedEditProfile"
       :cancel-action="() => (isOpenedEditProfile = false)"
       :user="user"

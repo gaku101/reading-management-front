@@ -11,4 +11,5 @@ declare interface Post {
   author: string
   title: string
   body: string
+  created_at: any
 }
