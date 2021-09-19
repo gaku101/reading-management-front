@@ -1,5 +1,5 @@
 <template>
-  <nav class="flex items-center justify-between mt-4">
+  <nav class="flex items-center justify-between py-4">
     <div
       class="flex items-center flex-shrink-0 text-white bg-red-500 px-4 mr-6"
     >
