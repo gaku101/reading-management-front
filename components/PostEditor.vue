@@ -111,7 +111,7 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props, { root, emit }) {
+  setup(_, { root, emit }) {
     const username = computed(() => root.$store.getters['user/username'])
     const categories = ref()
     const selectedCategory = ref(0)
@@ -124,7 +124,7 @@ export default defineComponent({
     const body = ref('')
     const createPost = async () => {
       try {
-        const { data } = await root.$axios.post('/api/posts', {
+        await root.$axios.post('/api/posts', {
           author: username.value,
           title: title.value,
           body: body.value,

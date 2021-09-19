@@ -29,11 +29,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from '@vue/composition-api'
+import { defineComponent, ref } from '@vue/composition-api'
 
 export default defineComponent({
   name: 'Index',
-  setup(_, { root }) {
+  setup(_) {
     const isOpenedEditor = ref(false)
     const openEditor = () => {
       isOpenedEditor.value = true

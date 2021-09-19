@@ -41,7 +41,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, ref } from '@vue/composition-api'
-import EditProfile from '~/components/EditProfile.vue'
+import EditProfile from '~/components/ProfileEditor.vue'
 
 export default defineComponent({
   components: { EditProfile },
