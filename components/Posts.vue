@@ -6,8 +6,8 @@
         :key="post.id"
         class="w-full sm:w-1/2 md:w-1/2 xl:w-1/4 p-4"
       >
-        <a
-          href=""
+        <NuxtLink
+          :to="`/${post.id}`"
           class="
             c-card
             block
@@ -78,7 +78,7 @@
           <div class="p-4 flex items-center text-sm text-gray-600 justify-end">
             {{ $dayjs(post.created_at).format('YYYY/MM/DD HH:mm') }}
           </div>
-        </a>
+        </NuxtLink>
       </div>
     </div>
   </div>
@@ -86,6 +86,7 @@
       
 <script lang="ts">
 import { defineComponent, ref, watch } from '@vue/composition-api'
+import { categoryColor } from '@/utils/categoryColor'
 
 export default defineComponent({
   name: 'Posts',
@@ -111,16 +112,7 @@ export default defineComponent({
       console.log('posts', posts.value)
     }
     listPosts()
-    const categoryColor = (id: number) => {
-      switch (id) {
-        case 1:
-          return 'bg-yellow-200 text-yellow-800'
-        case 2:
-          return 'bg-blue-200 text-blue-800'
-        default:
-          return 'bg-red-200 text-red-800'
-      }
-    }
+
     watch(
       () => props.isCreated,
       (val) => {
