@@ -85,8 +85,8 @@
 </template>
       
 <script lang="ts">
-import { categoryColor } from '@/utils/categoryColor'
 import { defineComponent, ref, watch } from '@vue/composition-api'
+import { categoryColor } from '@/utils/categoryColor'
 
 export default defineComponent({
   name: 'Posts',
