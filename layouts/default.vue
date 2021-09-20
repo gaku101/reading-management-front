@@ -4,9 +4,3 @@
     <Nuxt />
   </div>
 </template>
-
-<style>
-.bgGray {
-  background-color: #fafafa;
-}
-</style>

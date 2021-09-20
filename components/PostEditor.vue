@@ -17,23 +17,7 @@
       placeholder="Write body here..."
       v-model="body"
     ></textarea>
-    <div class="selectbox">
-      <select
-        name="category"
-        class="bgGray p-1 border-b border-gray-400"
-        :class="selectedCategory === 0 ? 'text-gray-400' : ''"
-        v-model="selectedCategory"
-      >
-        <option :value="0" style="display: none">Select category...</option>
-        <option
-          v-for="category in categories"
-          :key="category.id"
-          :value="category.id"
-        >
-          {{ category.name }}
-        </option>
-      </select>
-    </div>
+    <CategorySelect v-model="selectedCategory" />
     <div class="my-6 sm:flex sm:flex-row-reverse">
       <button
         type="button"
@@ -113,13 +97,7 @@ export default defineComponent({
   },
   setup(_, { root, emit }) {
     const username = computed(() => root.$store.getters['user/username'])
-    const categories = ref()
     const selectedCategory = ref(0)
-    const listCategories = async () => {
-      const { data } = await root.$axios.get(`/api/category`)
-      categories.value = data
-    }
-    listCategories()
     const title = ref('')
     const body = ref('')
     const createPost = async () => {
@@ -140,7 +118,6 @@ export default defineComponent({
       }
     }
     return {
-      categories,
       selectedCategory,
       title,
       body,
@@ -150,19 +127,6 @@ export default defineComponent({
 })
 </script>
 <style scoped>
-select {
-  outline: none;
-}
-input {
-  outline: none;
-}
-textarea {
-  outline: none;
-}
-.bgGray {
-  background-color: #fafafa;
-}
-
 #text3 {
   font-size: 16px;
   width: 100%;
