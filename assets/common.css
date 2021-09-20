@@ -1,0 +1,16 @@
+select {
+  outline: none;
+}
+input {
+  outline: none;
+}
+textarea {
+  outline: none;
+}
+.bgGray {
+  background-color: #fafafa;
+}
+.post-body {
+  white-space: pre-line;
+  word-wrap: break-word;
+}
