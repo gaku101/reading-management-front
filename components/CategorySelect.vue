@@ -47,7 +47,7 @@ export default defineComponent({
       if (props.value === id) {
         return true
       } else {
-        false
+        return false
       }
     }
     return {
