@@ -128,7 +128,7 @@ export default defineComponent({
           author: username.value,
           title: title.value,
           body: body.value,
-          category: selectedCategory.value,
+          categoryId: selectedCategory.value,
         })
         emit('update:isOpened', false)
         emit('update:isCreated', true)

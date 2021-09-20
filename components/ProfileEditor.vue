@@ -181,7 +181,7 @@ export default defineComponent({
       console.log('props.user', props.user)
       console.log('userInfo', userInfo)
       try {
-        const { data } = await root.$axios.post('/api/users/update', {
+        const { data } = await root.$axios.put('/api/users/update', {
           id: props.user.id,
           username: props.user.username,
           profile: userInfo.profile,
