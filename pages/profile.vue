@@ -1,11 +1,7 @@
 <template>
   <div class="max-w-md container mx-auto mt-20">
     <div class="grid grid-cols-3 place-items-center">
-      <img
-        class="col-span-3 w-24 h-24 rounded-full"
-        src="~assets/profile.jpg"
-        alt="Profile image"
-      />
+      <ProfileImage :url="user.image"  class="col-span-3 w-24 h-24"/>
       <div v-if="username" class="col-span-3 mt-6 text-2xl">{{ username }}</div>
       <div v-if="user" class="col-span-3 mt-3 text-md">{{ user.profile }}</div>
       <button
@@ -41,8 +37,10 @@
 
 <script lang="ts">
 import { defineComponent, computed, ref } from '@vue/composition-api'
+import ProfileImage from '~/components/ProfileImage.vue'
 
 export default defineComponent({
+  components: { ProfileImage },
   name: 'Profile',
   setup(_, { root }) {
     const user = computed(() => root.$store.getters['user/user'])

@@ -17,11 +17,10 @@
       </div>
       <div>
         <div v-if="username" class="relative">
-          <img
-            class="inline object-cover w-10 h-10 mr-2 rounded-full"
-            src="~assets/profile.jpg"
-            alt="Profile image"
-            @click="dropDown = !dropDown"
+          <ProfileImage
+            class="w-10 h-10 mr-2"
+            :url="user.image"
+            :click-action="() => (dropDown = !dropDown)"
           />
           <div
             v-if="dropDown"
@@ -87,6 +86,7 @@ import { defineComponent, computed, ref, watch } from '@vue/composition-api'
 export default defineComponent({
   name: 'Header',
   setup(_, { root }) {
+    const user = computed(() => root.$store.getters['user/user'])
     const username = computed(() => root.$store.getters['user/username'])
     const dropDown = ref(false)
     watch(
@@ -98,6 +98,7 @@ export default defineComponent({
     return {
       username,
       dropDown,
+      user,
     }
   },
 })
