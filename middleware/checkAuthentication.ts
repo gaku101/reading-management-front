@@ -13,7 +13,7 @@ export default async ({ $axios, store, route, redirect }: any) => {
   try {
     const { data } = await $axios.get(`/api/users/${username}`)
     console.log('getUser', data)
-    await store.dispatch('user/setUser', data.user)
+    await store.dispatch('user/setUser', data)
   } catch (e) {
     console.error(e)
     redirect('/sign-in')

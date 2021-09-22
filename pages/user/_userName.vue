@@ -28,7 +28,7 @@ export default defineComponent({
     const username = root.$route.params.userName
     const points = ref(0)
     const getAccount = async () => {
-      const { data } = await root.$axios.get(`/api/accounts/${user.username}`)
+      const { data } = await root.$axios.get(`/api/accounts/by/${user.username}`)
       points.value = data.balance
     }
     const getUser = async () => {

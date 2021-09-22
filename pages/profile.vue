@@ -49,7 +49,7 @@ export default defineComponent({
 
     const isOpenedEditProfile = ref(false)
     const getAccount = async () => {
-      const { data } = await root.$axios.get(`/api/accounts/${user.value.id}`)
+      const { data } = await root.$axios.get(`/api/accounts/by/${username}`)
       console.log('data', data)
       points.value = data.balance
     }

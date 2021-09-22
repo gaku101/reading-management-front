@@ -23,5 +23,6 @@ export const mutations: MutationTree<RootState> = {
 export const actions: ActionTree<RootState, RootState> = {
   async setUser({ commit }, user: UserState) {
     commit('setUser', user)
+    console.debug('actions', user)
   },
 }
