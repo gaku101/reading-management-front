@@ -10,15 +10,15 @@
     <div class="w-full block flex-grow flex items-center w-auto">
       <div class="text-sm flex-grow">
         <NuxtLink
-          class="inline-block hover:text-white mr-4"
+          class="inline-block hover:text-red-200 mr-4"
           to="/posts"
           id="menu-item-0"
           >Posts</NuxtLink
         >
-        <a href="#responsive-header" class="inline-block hover:text-white mr-4">
+        <a href="#responsive-header" class="inline-block hover:text-red-200 mr-4">
           Account
         </a>
-        <a class="inline-block hover:text-white"> Favorites </a>
+        <a class="inline-block hover:text-red-200"> Favorites </a>
       </div>
       <div>
         <div v-if="username" class="relative">

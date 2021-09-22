@@ -39,10 +39,10 @@
                 >
                 <span v-else class="inline-block" />
               </div>
-              <div v-if="!isRoot">
+              <NuxtLink :to="`/user/${post.author}`" class="hover:opacity-50" v-if="!isRoot">
                 <ProfileImage class="w-7 h-7 mr-2" :url="post.authorImage" />
                 <span class="ml-1">{{ post.author }}</span>
-              </div>
+              </NuxtLink>
             </div>
             <h2 class="mt-2 mb-2 font-bold">
               {{ post.title }}
