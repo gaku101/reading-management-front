@@ -19,23 +19,31 @@
           "
         >
           <div class="p-4">
-            <span
-              v-if="post.category.id"
-              class="
-                inline-block
-                px-2
-                py-1
-                leading-none
-                rounded-full
-                font-semibold
-                uppercase
-                tracking-wide
-                text-xs
-              "
-              :class="categoryColor(post.category.id)"
-              >{{ post.category.name }}</span
-            >
-            <span v-else class="inline-block" />
+            <div class="flex place-content-between">
+              <div>
+                <span
+                  v-if="post.category.id"
+                  class="
+                    inline-block
+                    px-2
+                    py-1
+                    leading-none
+                    rounded-full
+                    font-semibold
+                    uppercase
+                    tracking-wide
+                    text-xs
+                  "
+                  :class="categoryColor(post.category.id)"
+                  >{{ post.category.name }}</span
+                >
+                <span v-else class="inline-block" />
+              </div>
+              <div v-if="!isRoot">
+                <ProfileImage class="w-7 h-7 mr-2" :url="post.authorImage" />
+                <span class="ml-1">{{ post.author }}</span>
+              </div>
+            </div>
             <h2 class="mt-2 mb-2 font-bold">
               {{ post.title }}
             </h2>
@@ -89,18 +97,18 @@ import { defineComponent, ref, watch } from '@vue/composition-api'
 import { categoryColor } from '@/utils/categoryColor'
 
 export default defineComponent({
-  name: 'Posts',
+  name: 'PostCards',
   props: {
     isCreated: {
       type: Boolean,
-      required: true,
+      default: false,
     },
   },
   setup(props, { root, emit }) {
     const pageId = 1
     const pageSize = 30
     const posts = ref<Post[]>()
-    const listPosts = async () => {
+    const listMyPosts = async () => {
       const { data } = await root.$axios.get(
         `/api/posts?page_id=${pageId}&page_size=${pageSize}`
       )
@@ -111,13 +119,21 @@ export default defineComponent({
       posts.value = data
       console.log('posts', posts.value)
     }
-    listPosts()
+    const listPosts = async () => {
+      const { data } = await root.$axios.get(
+        `/api/posts/list?page_id=${pageId}&page_size=${pageSize}`
+      )
+      posts.value = data
+      console.log('posts', posts.value)
+    }
+    const isRoot = ref(root.$route.path === '/')
+    isRoot.value ? listMyPosts() : listPosts()
 
     watch(
       () => props.isCreated,
       (val) => {
         if (val) {
-          listPosts()
+          listMyPosts()
           emit('update:isCreated', false)
         }
       }
@@ -125,6 +141,7 @@ export default defineComponent({
     return {
       posts,
       categoryColor,
+      isRoot,
     }
   },
 })

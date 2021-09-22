@@ -24,7 +24,7 @@
       :is-created.sync="isCreatedPost"
       :cancel-action="closeEditor"
     />
-    <Posts :is-created.sync="isCreatedPost" />
+    <PostCards :is-created.sync="isCreatedPost" />
   </div>
 </template>
 
