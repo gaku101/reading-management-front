@@ -9,7 +9,12 @@
     </div>
     <div class="w-full block flex-grow flex items-center w-auto">
       <div class="text-sm flex-grow">
-        <a class="inline-block hover:text-white mr-4"> Posts </a>
+        <NuxtLink
+          class="inline-block hover:text-white mr-4"
+          to="/posts"
+          id="menu-item-0"
+          >Posts</NuxtLink
+        >
         <a href="#responsive-header" class="inline-block hover:text-white mr-4">
           Account
         </a>
