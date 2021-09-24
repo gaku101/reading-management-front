@@ -126,8 +126,31 @@ export default defineComponent({
       posts.value = data
       console.log('posts', posts.value)
     }
+<<<<<<< Updated upstream
     const isRoot = ref(root.$route.path === '/')
     isRoot.value ? listMyPosts() : listPosts()
+=======
+    const listFavorites = async () => {
+      const { data } = await root.$axios.get(
+        `/api/post-favorite/list/${user.value.id}?page_id=${pageId}&page_size=${pageSize}`
+      )
+      posts.value = data
+      console.log('listFavorites', posts.value)
+    }
+    const path = ref(root.$route.path)
+    const isRoot = ref(path.value === '/')
+    switch (path.value) {
+      case '/':
+        listMyPosts()
+        break
+      case '/posts':
+        listPosts()
+        break
+      case '/favorites':
+        listFavorites()
+        break
+    }
+>>>>>>> Stashed changes
 
     watch(
       () => props.isCreated,

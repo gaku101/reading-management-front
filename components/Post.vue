@@ -170,6 +170,32 @@ export default defineComponent({
     const cancelEditing = () => {
       isEditing.value = false
     }
+<<<<<<< Updated upstream
+=======
+    const isFavorite = ref(false)
+    const getFavorite = async () => {
+      try {
+        const { data } = await root.$axios.get(`/api/post-favorite/${postId}`)
+        console.log('getFavorite', data)
+        if (!!data && data.user_id === user.value.id) isFavorite.value = true
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    getFavorite()
+    const addFavorite = async () => {
+      try {
+        const { data } = await root.$axios.post('/api/post-favorite', {
+          postId,
+          userId: user.value.id,
+        })
+        console.log('addFavorite', data)
+        isFavorite.value = true
+      } catch (e) {
+        console.error(e)
+      }
+    }
+>>>>>>> Stashed changes
     return {
       post,
       categoryColor,
