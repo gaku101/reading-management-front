@@ -46,7 +46,11 @@
       class="mt-4 flex justify-end"
       v-model="selectedCategory"
     />
-    <div v-if="!isEditing" class="post-body leading-9 mt-8 text-lg" v-text="post.body" />
+    <div
+      v-if="!isEditing"
+      class="post-body leading-9 mt-8 text-lg"
+      v-text="post.body"
+    />
     <textarea
       v-else
       rows="10"
@@ -54,23 +58,7 @@
       placeholder="Write body here..."
       v-model="post.body"
     ></textarea>
-    <svg
-      v-if="!isEditing"
-      xmlns="http://www.w3.org/2000/svg"
-      class="h-6 w-6 ml-auto mt-4 text-blue-600"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      @click="openEditor"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-      />
-    </svg>
-    <div v-else class="my-6 sm:flex sm:flex-row-reverse">
+    <div v-if="isEditing" class="my-6 sm:flex sm:flex-row-reverse">
       <button
         type="button"
         class="
@@ -126,6 +114,39 @@
         Cancel
       </button>
     </div>
+    <svg
+      v-if="!isEditing && isLoginedUser"
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-6 w-6 ml-auto mt-4 text-blue-600"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      @click="openEditor"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+      />
+    </svg>
+    <svg
+      v-if="!isLoginedUser"
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-6 w-6 ml-auto mt-4 text-red-600"
+      :class="isFavorite ? 'fill-current' : ''"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      @click="addFavorite"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+      />
+    </svg>
   </div>
 </template>
 <script lang="ts">
@@ -135,8 +156,8 @@ import { categoryColor } from '@/utils/categoryColor'
 export default defineComponent({
   name: 'Post',
   setup(_, { root }) {
-    const user = computed(() => root.$store.getters['user/user'])
     const username = computed(() => root.$store.getters['user/username'])
+    const user = computed(() => root.$store.getters['user/user'])
     const selectedCategory = ref(0)
     const postId = parseInt(root.$route.params.postId)
     const post = ref<Post>()
@@ -148,6 +169,7 @@ export default defineComponent({
       console.log('selectedCategory', selectedCategory.value)
     }
     getPost()
+    const isLoginedUser = computed(() => username.value === post.value!.author)
     const isEditing = ref(false)
     const openEditor = () => {
       isEditing.value = true
@@ -202,6 +224,9 @@ export default defineComponent({
       selectedCategory,
       updatePost,
       cancelEditing,
+      isLoginedUser,
+      addFavorite,
+      isFavorite,
     }
   },
 })

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="text-2xl">Posts</div>
+    <div class="text-2xl">Favorites</div>
     <PostCards />
   </div>
 </template>
