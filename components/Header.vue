@@ -15,10 +15,12 @@
           id="menu-item-0"
           >Posts</NuxtLink
         >
-        <a href="#responsive-header" class="inline-block hover:text-red-200 mr-4">
-          Account
-        </a>
-        <a class="inline-block hover:text-red-200"> Favorites </a>
+        <NuxtLink
+          class="inline-block hover:text-red-200 mr-4"
+          to="/favorites"
+          id="menu-item-0"
+          >Favorites</NuxtLink
+        >
       </div>
       <div>
         <div v-if="username" class="relative">
