@@ -135,6 +135,7 @@ import { categoryColor } from '@/utils/categoryColor'
 export default defineComponent({
   name: 'Post',
   setup(_, { root }) {
+    const user = computed(() => root.$store.getters['user/user'])
     const username = computed(() => root.$store.getters['user/username'])
     const selectedCategory = ref(0)
     const postId = parseInt(root.$route.params.postId)
@@ -170,8 +171,6 @@ export default defineComponent({
     const cancelEditing = () => {
       isEditing.value = false
     }
-<<<<<<< Updated upstream
-=======
     const isFavorite = ref(false)
     const getFavorite = async () => {
       try {
@@ -195,7 +194,6 @@ export default defineComponent({
         console.error(e)
       }
     }
->>>>>>> Stashed changes
     return {
       post,
       categoryColor,

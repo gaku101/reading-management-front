@@ -39,7 +39,11 @@
                 >
                 <span v-else class="inline-block" />
               </div>
-              <NuxtLink :to="`/user/${post.author}`" class="hover:opacity-50" v-if="!isRoot">
+              <NuxtLink
+                :to="`/user/${post.author}`"
+                class="hover:opacity-50"
+                v-if="!isRoot"
+              >
                 <ProfileImage class="w-7 h-7 mr-2" :url="post.authorImage" />
                 <span class="ml-1">{{ post.author }}</span>
               </NuxtLink>
@@ -93,7 +97,7 @@
 </template>
       
 <script lang="ts">
-import { defineComponent, ref, watch } from '@vue/composition-api'
+import { computed, defineComponent, ref, watch } from '@vue/composition-api'
 import { categoryColor } from '@/utils/categoryColor'
 
 export default defineComponent({
@@ -105,6 +109,7 @@ export default defineComponent({
     },
   },
   setup(props, { root, emit }) {
+    const user = computed(() => root.$store.getters['user/user'])
     const pageId = 1
     const pageSize = 30
     const posts = ref<Post[]>()
@@ -126,10 +131,6 @@ export default defineComponent({
       posts.value = data
       console.log('posts', posts.value)
     }
-<<<<<<< Updated upstream
-    const isRoot = ref(root.$route.path === '/')
-    isRoot.value ? listMyPosts() : listPosts()
-=======
     const listFavorites = async () => {
       const { data } = await root.$axios.get(
         `/api/post-favorite/list/${user.value.id}?page_id=${pageId}&page_size=${pageSize}`
@@ -150,7 +151,6 @@ export default defineComponent({
         listFavorites()
         break
     }
->>>>>>> Stashed changes
 
     watch(
       () => props.isCreated,
