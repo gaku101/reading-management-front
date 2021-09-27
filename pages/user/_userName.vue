@@ -6,6 +6,43 @@
         {{ user.username }}
       </div>
       <div v-if="user" class="col-span-3 mt-3 text-md">{{ user.profile }}</div>
+      <button
+        v-if="!isFollow"
+        class="
+          col-span-3
+          bg-transparent
+          hover:bg-blue-400
+          text-blue-400
+          font-bold
+          hover:text-white
+          py-1
+          px-4
+          border border-blue-300
+          hover:border-transparent
+          rounded-2xl
+          mt-3
+        "
+        @click="followUser"
+      >
+        Follow
+      </button>
+      <button
+        v-else
+        class="
+          col-span-3
+          bg-blue-400
+          font-bold
+          text-white
+          py-1
+          px-4
+          border-transparent
+          rounded-2xl
+          mt-3
+        "
+        @click="followUser"
+      >
+        Following
+      </button>
       <div class="col-span-3 mt-6 text-md text-blue-400">
         Newbie&nbsp;&nbsp;|&nbsp;&nbsp;{{ points }} points
       </div>
@@ -28,7 +65,9 @@ export default defineComponent({
     const username = root.$route.params.userName
     const points = ref(0)
     const getAccount = async () => {
-      const { data } = await root.$axios.get(`/api/accounts/by/${user.username}`)
+      const { data } = await root.$axios.get(
+        `/api/accounts/by/${user.username}`
+      )
       points.value = data.balance
     }
     const getUser = async () => {
@@ -36,15 +75,39 @@ export default defineComponent({
         const { data } = await root.$axios.get(`/api/users/${username}`)
         Object.assign(user, data)
         getAccount()
+        getFollow()
       } catch (e) {
         console.error(e)
       }
     }
     getUser()
+    const isFollow = ref(false)
+    const followUser = async () => {
+      try {
+        const { data } = await root.$axios.post('/api/follow', {
+          followingId: user.id,
+        })
+        console.log('followUser', data)
+        isFollow.value = true
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    const getFollow = async () => {
+      try {
+        const { data } = await root.$axios.get(`/api/follow/${user.id}`)
+        console.log('getFollow', data)
+        if (data) isFollow.value = true
+      } catch (e) {
+        console.error(e)
+      }
+    }
 
     return {
       user,
       points,
+      followUser,
+      isFollow,
     }
   },
 })

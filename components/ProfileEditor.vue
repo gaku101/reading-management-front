@@ -147,10 +147,7 @@
   </div>
 </template>
 <script lang="ts">
-import {
-  defineComponent,
-  reactive,
-} from '@vue/composition-api'
+import { defineComponent, reactive, PropType } from '@vue/composition-api'
 
 export default defineComponent({
   name: 'ProfileEditor',
@@ -160,8 +157,8 @@ export default defineComponent({
       required: true,
     },
     cancelAction: {
-      type: Function,
-      required: true,
+      type: Function as PropType<() => any>,
+      default: () => {},
     },
     user: {
       type: Object as () => UserState,
@@ -181,7 +178,7 @@ export default defineComponent({
       console.log('props.user', props.user)
       console.log('userInfo', userInfo)
       try {
-        const { data } = await root.$axios.put('/api/users/update', {
+        const { data } = await root.$axios.put('/api/users', {
           id: props.user.id,
           username: props.user.username,
           profile: userInfo.profile,
@@ -189,6 +186,7 @@ export default defineComponent({
         })
         console.log('data', data)
         Object.assign(props.user, userInfo)
+        props.cancelAction()
       } catch (e) {
         console.error(e)
       }

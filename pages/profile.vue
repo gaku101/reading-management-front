@@ -23,7 +23,7 @@
       >
         Edit Profile
       </button>
-      <div v-if="points" class="col-span-3 mt-6 text-md text-blue-400">
+      <div v-if="points !== null" class="col-span-3 mt-6 text-md text-blue-400">
         Newbie&nbsp;&nbsp;|&nbsp;&nbsp;{{ points }} points
       </div>
     </div>
@@ -49,8 +49,8 @@ export default defineComponent({
 
     const isOpenedEditProfile = ref(false)
     const getAccount = async () => {
-      const { data } = await root.$axios.get(`/api/accounts/by/${username}`)
-      console.log('data', data)
+      const { data } = await root.$axios.get(`/api/accounts/by/${username.value}`)
+      console.log('getAccount', data)
       points.value = data.balance
     }
     getAccount()
