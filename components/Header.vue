@@ -21,6 +21,12 @@
           id="menu-item-0"
           >Favorites</NuxtLink
         >
+        <NuxtLink
+          class="inline-block hover:text-red-200 mr-4"
+          to="/following"
+          id="menu-item-0"
+          >Following</NuxtLink
+        >
       </div>
       <div>
         <div v-if="username" class="relative">
