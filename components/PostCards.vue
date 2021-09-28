@@ -9,7 +9,6 @@
         <NuxtLink
           :to="`/${post.id}`"
           class="
-            c-card
             block
             bg-white
             shadow-md

@@ -1,6 +1,6 @@
 <template>
   <img
-    class="inline rounded-full"
+    class="rounded-full"
     :src="url"
     alt="profile image"
     @click="clickAction"
