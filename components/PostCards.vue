@@ -40,11 +40,11 @@
               </div>
               <NuxtLink
                 :to="`/user/${post.author}`"
-                class="hover:opacity-50"
+                class="hover:opacity-50 flex place-items-center"
                 v-if="!isRoot"
               >
-                <ProfileImage class="w-7 h-7 mr-2" :url="post.authorImage" />
-                <span class="ml-1">{{ post.author }}</span>
+                <span class="mr-2">{{ post.author }}</span>
+                <ProfileImage class="w-7 h-7" :url="post.authorImage" />
               </NuxtLink>
             </div>
             <h2 class="mt-2 mb-2 font-bold">
