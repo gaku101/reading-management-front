@@ -17,7 +17,7 @@
           hover:text-white
           py-1
           px-4
-          border border-blue-300
+          border border-blue-400
           hover:border-transparent
           rounded-2xl
           mt-3
@@ -35,13 +35,17 @@
           text-white
           py-1
           px-4
-          border-transparent
           rounded-2xl
           mt-3
+          hover:text-blue-400
+          hover:bg-transparent
+          border border-blue-400
         "
-        @click="followUser"
+        @click="unfollowUser"
+        @mouseover="btnText = 'unfollow'"
+        @mouseleave="btnText = 'following'"
       >
-        Following
+        <span>{{ btnText }}</span>
       </button>
       <div class="col-span-3 mt-6 text-md text-blue-400">
         Newbie&nbsp;&nbsp;|&nbsp;&nbsp;{{ points }} points
@@ -102,12 +106,23 @@ export default defineComponent({
         console.error(e)
       }
     }
-
+    const unfollowUser = async () => {
+      try {
+        const data = await root.$axios.delete(`/api/follow/${user.id}`)
+        console.log('unfollowUser', data)
+        isFollow.value = false
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    const btnText = ref('following')
     return {
       user,
       points,
       followUser,
       isFollow,
+      unfollowUser,
+      btnText,
     }
   },
 })
