@@ -1,14 +1,15 @@
 <template>
-  <Post />
+  <div>
+    <Post />
+    <Comments />
+  </div>
 </template>
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { computed, defineComponent, ref } from '@vue/composition-api'
+import { list } from 'postcss'
 
 export default defineComponent({
   name: 'PostId',
-  setup(_) {
-    return {
-    }
-  },
+  setup() {},
 })
 </script>

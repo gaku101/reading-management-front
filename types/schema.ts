@@ -12,4 +12,8 @@ declare interface Post {
   title: string
   body: string
   created_at: any
+  category:{
+    id :number
+    name: string
+  }
 }
