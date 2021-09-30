@@ -80,7 +80,7 @@ export default defineComponent({
     const createComment = async () => {
       try {
         const { data } = await root.$axios.post('/api/comments', {
-          postId: postId,
+          postId,
           body: comment.value,
         })
         console.log('createComment', data)
@@ -103,7 +103,7 @@ export default defineComponent({
       comment,
       comments,
       createComment,
-      isLoginedUser
+      isLoginedUser,
     }
   },
 })

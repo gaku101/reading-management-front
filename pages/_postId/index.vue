@@ -5,8 +5,7 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref } from '@vue/composition-api'
-import { list } from 'postcss'
+import { defineComponent } from '@vue/composition-api'
 
 export default defineComponent({
   name: 'PostId',
