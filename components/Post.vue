@@ -114,22 +114,38 @@
         Cancel
       </button>
     </div>
-    <svg
-      v-if="!isEditing && isLoginedUser"
-      xmlns="http://www.w3.org/2000/svg"
-      class="h-6 w-6 ml-auto mt-4 text-blue-600"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      @click="openEditor"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-      />
-    </svg>
+    <div v-if="!isEditing && isLoginedUser" class="flex justify-end">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6 inline-block mt-4 text-blue-600"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        @click="openEditor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+        />
+      </svg>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6 inline-block mt-4 ml-4 text-gray-500"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        @click="openConfirm"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+        />
+      </svg>
+    </div>
     <svg
       v-if="!isLoginedUser"
       xmlns="http://www.w3.org/2000/svg"
@@ -147,13 +163,21 @@
         d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
       />
     </svg>
+    <ConfirmDialog
+      :is-opened="isOpenedConfirm"
+      :cancel-action="() => (isOpenedConfirm = false)"
+      :ok-action="deletePost"
+      >Are you sure you want to delete this post?</ConfirmDialog
+    >
   </div>
 </template>
 <script lang="ts">
 import { computed, defineComponent, ref } from '@vue/composition-api'
 import { categoryColor } from '@/utils/categoryColor'
+import ConfirmDialog from './ConfirmDialog.vue'
 
 export default defineComponent({
+  components: { ConfirmDialog },
   name: 'Post',
   setup(_, { root }) {
     const username = computed(() => root.$store.getters['user/username'])
@@ -216,6 +240,19 @@ export default defineComponent({
         console.error(e)
       }
     }
+    const isOpenedConfirm = ref(false)
+    const openConfirm = () => {
+      isOpenedConfirm.value = true
+    }
+    const deletePost = async () => {
+      try {
+        const { data } = await root.$axios.delete(`/api/posts/${postId}`)
+        console.log('deletePost', data)
+        root.$router.push('/')
+      } catch (e) {
+        console.error(e)
+      }
+    }
     return {
       post,
       categoryColor,
@@ -227,6 +264,9 @@ export default defineComponent({
       isLoginedUser,
       addFavorite,
       isFavorite,
+      openConfirm,
+      isOpenedConfirm,
+      deletePost,
     }
   },
 })
