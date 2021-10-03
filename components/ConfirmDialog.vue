@@ -122,6 +122,7 @@
 </template>
 
 <script lang="ts">
+// eslint-disable-next-line
 import { defineComponent, PropType } from '@vue/composition-api'
 
 export default defineComponent({

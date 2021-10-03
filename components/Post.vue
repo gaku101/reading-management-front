@@ -174,10 +174,8 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from '@vue/composition-api'
 import { categoryColor } from '@/utils/categoryColor'
-import ConfirmDialog from './ConfirmDialog.vue'
 
 export default defineComponent({
-  components: { ConfirmDialog },
   name: 'Post',
   setup(_, { root }) {
     const username = computed(() => root.$store.getters['user/username'])
