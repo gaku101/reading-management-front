@@ -48,7 +48,6 @@
               py-2
               px-3
               text-gray-700
-              mb-3
               leading-tight
               focus:outline-none
               focus:shadow-outline
@@ -60,6 +59,11 @@
             v-model="userInfo.password"
             @keypress.enter="signIn"
           />
+        </div>
+        <div class="text-blue-400 mb-4 text-xs">
+          Please
+          <NuxtLink to="/sign-up" class="underline font-bold hover:text-blue-300">SignUp</NuxtLink> if
+          you don't have an account
         </div>
         <div>
           <button
