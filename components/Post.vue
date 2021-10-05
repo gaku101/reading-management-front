@@ -6,7 +6,7 @@
       }}</span>
       <input
         v-else
-        class="bgGray"
+        class="bg-gray"
         id="text3"
         type="text"
         placeholder="Write title here..."
@@ -48,13 +48,13 @@
     />
     <div
       v-if="!isEditing"
-      class="post-body leading-9 mt-8 text-lg"
+      class="new-line leading-9 mt-8 text-lg"
       v-text="post.body"
     />
     <textarea
       v-else
       rows="10"
-      class="block w-full bgGray mt-8 leading-9 text-lg"
+      class="block w-full bg-gray mt-8 leading-9 text-lg"
       placeholder="Write body here..."
       v-model="post.body"
     ></textarea>

@@ -7,10 +7,10 @@ input {
 textarea {
   outline: none;
 }
-.bgGray {
+.bg-gray {
   background-color: #fafafa;
 }
-.post-body {
+.new-line {
   white-space: pre-line;
   word-wrap: break-word;
 }

@@ -2,7 +2,7 @@
   <div class="selectbox">
     <select
       name="category"
-      class="bgGray p-1 border-b border-gray-400"
+      class="bg-gray p-1 border-b border-gray-400"
       @change="updateValue"
     >
       <option :value="0" style="display: none">Select category...</option>

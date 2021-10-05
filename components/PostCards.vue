@@ -50,7 +50,7 @@
             <h2 class="mt-2 mb-2 font-bold">
               {{ post.title }}
             </h2>
-            <p class="text-sm post-body leading-6" v-text="post.body">
+            <p class="text-sm new-line leading-6" v-text="post.body">
               {{ post.body }}
             </p>
           </div>

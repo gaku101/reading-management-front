@@ -1,8 +1,8 @@
 <template>
   <div v-if="isOpened">
-    <div class="group mt-4 bgGray w-4/12">
+    <div class="group mt-4 bg-gray w-4/12">
       <input
-        class="bgGray"
+        class="bg-gray"
         id="text3"
         type="text"
         placeholder="Write title here..."
@@ -13,7 +13,7 @@
     </div>
     <textarea
       rows="10"
-      class="block w-full mx-auto mt-8 bgGray"
+      class="block w-full mx-auto mt-8 bg-gray"
       placeholder="Write body here..."
       v-model="body"
     ></textarea>
