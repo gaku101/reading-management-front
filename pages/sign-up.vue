@@ -32,6 +32,32 @@
           />
           <span class="text-red-400 text-xs">{{ usernameValidation }}</span>
         </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
+            Email
+          </label>
+          <input
+            class="
+              shadow
+              appearance-none
+              border
+              rounded
+              w-full
+              py-2
+              px-3
+              text-gray-700
+              leading-tight
+              focus:outline-none
+              focus:shadow-outline
+            "
+            id="email"
+            type="text"
+            placeholder="Email"
+            autocomplete="text"
+            v-model="userInfo.email"
+          />
+          <span class="text-red-400 text-xs">{{ emailValidation }}</span>
+        </div>
         <div class="mb-2">
           <label
             class="block text-gray-700 text-sm font-bold mb-2"
@@ -128,6 +154,7 @@ import {
 import useValidationRules from '@/utils/useValidation'
 interface UserInfo {
   username: string
+  email: string
   password: string
   passwordConfirm: string
 }
@@ -136,20 +163,26 @@ export default defineComponent({
   name: 'SignUp',
   layout: 'no-header',
   setup(_, { root }) {
-    const { usernameRules, passwordRules, passwordConfirmRules } =
+    const { usernameRules, passwordRules, passwordConfirmRules, emailRules } =
       useValidationRules()
     const userInfo: UserInfo = reactive({
       username: '',
+      email: '',
       password: '',
       passwordConfirm: '',
     })
     const usernameValidation = ref('')
+    const emailValidation = ref('')
     const passwordValidation = ref('')
     const passwordConfirmValidation = ref('')
     const validation = ref(false)
     watch(
       () => userInfo.username,
       (v: string) => (validation.value = usernameRules(v, usernameValidation))
+    )
+    watch(
+      () => userInfo.email,
+      (v: string) => (validation.value = emailRules(v, emailValidation))
     )
     watch(
       () => userInfo.password,
@@ -167,6 +200,7 @@ export default defineComponent({
     const validate = computed(() => {
       if (
         !userInfo.username ||
+        !userInfo.email ||
         !userInfo.password ||
         !userInfo.passwordConfirm
       ) {
@@ -174,6 +208,7 @@ export default defineComponent({
         return true
       } else if (
         !usernameValidation.value &&
+        !emailValidation.value &&
         !passwordValidation.value &&
         !passwordConfirmValidation.value &&
         validation.value
@@ -185,22 +220,50 @@ export default defineComponent({
         return true
       }
     })
-    const signUp = async () => {
+    const signIn = async () => {
       try {
         const { data } = await root.$axios.post('/api/users/login', {
           username: userInfo.username,
-          email: 'umeda@testemail.com',
-          password: userInfo.username,
-          profile: 'test',
-          image:''
+          password: userInfo.password,
         })
+        if (data.access_token) {
+          await root.$store.dispatch('user/setUser', data.user)
+          localStorage.setItem('token', data.access_token)
+          localStorage.setItem('username', data.user.username)
+          root.$router.push('/')
+        }
       } catch (e) {
         console.error(e)
+      }
+    }
+    const signUp = async () => {
+      validation.value = usernameRules(userInfo.username, usernameValidation)
+      validation.value = emailRules(userInfo.email, emailValidation)
+      validation.value = passwordRules(userInfo.password, passwordValidation)
+      validation.value = passwordConfirmRules(
+        userInfo.passwordConfirm,
+        userInfo.password,
+        passwordConfirmValidation
+      )
+      try {
+        const { data } = await root.$axios.post('/api/users', {
+          username: userInfo.username,
+          email: userInfo.email,
+          password: userInfo.password,
+          profile: '',
+          image:
+            'https://eitrawmaterials.eu/wp-content/uploads/2016/09/person-icon.png',
+        })
+        console.log('signUp', data)
+        signIn()
+      } catch (e) {
+        console.error(e.response)
       }
     }
     return {
       userInfo,
       usernameValidation,
+      emailValidation,
       passwordValidation,
       passwordConfirmValidation,
       validate,

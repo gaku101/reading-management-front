@@ -17,6 +17,23 @@ export default () => {
       return true
     }
   }
+  const emailRules = (v: string, email: Ref<string>) => {
+    console.log('usernameRules', v, email.value)
+    if (!v) {
+      email.value = 'emailの入力は必須です'
+      return false
+    } else if (
+      !v.match(
+        /^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]{1,}\.[A-Za-z0-9]{1,}$/
+      )
+    ) {
+      email.value = '有効なemailを入力してください'
+      return false
+    } else {
+      email.value = ''
+      return true
+    }
+  }
   const passwordRules = (v: string, password: Ref<string>) => {
     console.log('usernameRules', v, password.value)
     if (!v) {
@@ -76,15 +93,8 @@ export default () => {
   }
   return {
     usernameRules,
+    emailRules,
     passwordRules,
     passwordConfirmRules,
   }
-}
-const rules = {
-  confirmNewPassword: [
-    (v: string) => !!v || '新しいパスワード（確認用）の入力は必須です',
-    // (v: string) =>
-    //   v === this.passwordFormData.newPassword ||
-    //   '新しいパスワードと新しいパスワード（確認用）の入力が一致していません',
-  ],
 }
