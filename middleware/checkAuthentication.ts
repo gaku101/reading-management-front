@@ -1,4 +1,4 @@
-const excludedNames = ['sign-in']
+const excludedNames = ['sign-in','sign-up']
 const isExcludedName = (name: string) => {
   return excludedNames.includes(name)
 }

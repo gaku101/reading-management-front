@@ -30,6 +30,7 @@
             autocomplete="text"
             v-model="userInfo.username"
           />
+          <span class="text-red-400 text-xs">{{ usernameValidation }}</span>
         </div>
         <div class="mb-6">
           <label
@@ -48,7 +49,6 @@
               py-2
               px-3
               text-gray-700
-              mb-3
               leading-tight
               focus:outline-none
               focus:shadow-outline
@@ -60,7 +60,18 @@
             v-model="userInfo.password"
             @keypress.enter="signIn"
           />
+          <span class="text-red-400 text-xs">{{ passwordValidation }}</span>
         </div>
+        <div class="text-blue-400 mb-4 text-xs">
+          Please
+          <NuxtLink
+            to="/sign-up"
+            class="underline font-bold hover:text-blue-300"
+            >SignUp</NuxtLink
+          >
+          if you don't have an account
+        </div>
+        <div class="text-red-400 text-xs mb-2">{{ signInError }}</div>
         <div>
           <button
             class="
@@ -75,6 +86,7 @@
               focus:shadow-outline
             "
             type="button"
+            :disabled="validate"
             @click="signIn"
           >
             Sign In
@@ -86,7 +98,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from '@vue/composition-api'
+import {
+  computed,
+  defineComponent,
+  reactive,
+  ref,
+  watch,
+} from '@vue/composition-api'
+import useValidationRules from '@/utils/useValidation'
 
 interface UserInfo {
   username: string
@@ -97,13 +116,15 @@ export default defineComponent({
   name: 'SignIn',
   layout: 'no-header',
   setup(_, { root }) {
+    const { usernameRules, passwordRules } = useValidationRules()
     const userInfo: UserInfo = reactive({
       username: '',
       password: '',
     })
     localStorage.removeItem('token')
     localStorage.removeItem('username')
-    /** サインイン */
+    /** signIn */
+    const signInError = ref('')
     const signIn = async () => {
       console.log('userInfo', userInfo.username, userInfo.password)
       try {
@@ -119,13 +140,53 @@ export default defineComponent({
           root.$router.push('/')
         }
       } catch (e) {
-        console.error(e)
+        const { data } = e.response
+        console.error(data)
+        if (data) {
+          signInError.value = 'エラーが発生しました'
+        }
       }
     }
+    const usernameValidation = ref('')
+    const passwordValidation = ref('')
+    const validation = ref(false)
+    watch(
+      () => userInfo.username,
+      (v: string) => (validation.value = usernameRules(v, usernameValidation))
+    )
+    watch(
+      () => userInfo.password,
+      (v: string) => (validation.value = passwordRules(v, passwordValidation))
+    )
+    const validate = computed(() => {
+      if (!userInfo.username || !userInfo.password) {
+        console.log('some userInfo not set')
+        return true
+      } else if (
+        !usernameValidation.value &&
+        !passwordValidation.value &&
+        validation.value
+      ) {
+        console.log('passed validation')
+        return false
+      } else {
+        console.log('not passed validation', validation.value)
+        return true
+      }
+    })
     return {
       userInfo,
       signIn,
+      usernameValidation,
+      passwordValidation,
+      validate,
+      signInError,
     }
   },
 })
 </script>
+<style scoped>
+button:disabled {
+  background: #ccc;
+}
+</style>
