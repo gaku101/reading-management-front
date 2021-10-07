@@ -118,6 +118,16 @@
             passwordConfirmValidation
           }}</span>
         </div>
+        <div class="text-blue-400 mb-4 text-xs">
+          Please
+          <NuxtLink
+            to="/sign-in"
+            class="underline font-bold hover:text-blue-300"
+            >SignIn</NuxtLink
+          >
+          if you have an account
+        </div>
+        <span class="text-red-400 text-xs">{{ signUpError }}</span>
         <div>
           <button
             class="
@@ -236,6 +246,7 @@ export default defineComponent({
         console.error(e)
       }
     }
+    const signUpError = ref('')
     const signUp = async () => {
       validation.value = usernameRules(userInfo.username, usernameValidation)
       validation.value = emailRules(userInfo.email, emailValidation)
@@ -257,7 +268,21 @@ export default defineComponent({
         console.log('signUp', data)
         signIn()
       } catch (e) {
-        console.error(e.response)
+        const { data } = e.response
+        console.error(data)
+        if (
+          data.error ===
+          'pq: duplicate key value violates unique constraint "users_username_key"'
+        ) {
+          usernameValidation.value = 'このusernameは既に使用されています'
+        } else if (
+          data.error ===
+          'pq: duplicate key value violates unique constraint "users_email_key"'
+        ) {
+          emailValidation.value = 'このemailは既に使用されています'
+        } else if (data) {
+          signUpError.value = 'エラーが発生しました'
+        }
       }
     }
     return {
@@ -268,6 +293,7 @@ export default defineComponent({
       passwordConfirmValidation,
       validate,
       signUp,
+      signUpError,
     }
   },
 })

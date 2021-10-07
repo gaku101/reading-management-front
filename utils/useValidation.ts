@@ -45,10 +45,6 @@ export default () => {
     } else if (!v.match(/^[a-zA-Z0-9]+$/)) {
       password.value = 'passwordは半角英数字で入力してください'
       return false
-    } else if (!v.match(/[0-9]/)) {
-      password.value =
-        'passwordは最低1文字以上の数字が含まれている必要があります'
-      return false
     } else if (!v.match(/[a-zA-Z]/)) {
       password.value =
         'passwordは最低1文字以上のアルファベットが含まれている必要があります'
@@ -57,6 +53,10 @@ export default () => {
       password.value = ''
       return true
     }
+    // else if (!v.match(/[0-9]/)) {
+    //   password.value =
+    //     'passwordは最低1文字以上の数字が含まれている必要があります'
+    //   return false}
   }
   const passwordConfirmRules = (
     v: string,
