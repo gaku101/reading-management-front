@@ -114,13 +114,13 @@ export default defineComponent({
       console.log('changeFile', uploadfile.value)
 
       // パラメータ生成
-      let params = new FormData()
+      const params = new FormData()
       // FormDataにアップロードするファイルを設定
       params.append('file', uploadfile.value)
       console.log('params', params)
       // API実行
       try {
-        let { data } = await root.$axios.post(
+        const { data } = await root.$axios.post(
           `/api/images/${user.value.id}`,
           params,
           {
