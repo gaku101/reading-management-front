@@ -148,7 +148,7 @@
 </template>
 <script lang="ts">
 // eslint-disable-next-line
-import { defineComponent, reactive, PropType, ref } from '@vue/composition-api'
+import { defineComponent, reactive, PropType } from '@vue/composition-api'
 
 export default defineComponent({
   name: 'ProfileEditor',
