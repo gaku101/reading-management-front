@@ -4,6 +4,8 @@
     :src="url"
     alt="profile image"
     @click="clickAction"
+    @mouseover="mouseover"
+    @mouseleave="mouseleave"
   />
 </template>
 <script>
@@ -17,6 +19,14 @@ export default defineComponent({
       requried: true,
     },
     clickAction: {
+      type: Function,
+      default: () => {},
+    },
+    mouseover: {
+      type: Function,
+      default: () => {},
+    },
+    mouseleave: {
       type: Function,
       default: () => {},
     },
