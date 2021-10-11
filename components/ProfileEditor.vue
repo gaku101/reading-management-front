@@ -148,7 +148,7 @@
 </template>
 <script lang="ts">
 // eslint-disable-next-line
-import { defineComponent, reactive, PropType } from '@vue/composition-api'
+import { defineComponent, reactive, PropType, ref } from '@vue/composition-api'
 
 export default defineComponent({
   name: 'ProfileEditor',
@@ -183,7 +183,6 @@ export default defineComponent({
           id: props.user.id,
           username: props.user.username,
           profile: userInfo.profile,
-          image: userInfo.image,
         })
         console.log('data', data)
         Object.assign(props.user, userInfo)
