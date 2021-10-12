@@ -121,7 +121,7 @@ export default defineComponent({
       // API実行
       try {
         const { data } = await root.$axios.post(
-          `/api/images/${user.value.id}`,
+          `/api/images/${user.value.username}`,
           params,
           {
             headers: {
