@@ -87,13 +87,15 @@ export default defineComponent({
         const { data } = await root.$axios.post('/api/posts', {
           author: user.value.username,
           title: selectedBook.value.title,
-          body: "test",
+          bookAuthor: selectedBook.value.author,
+          bookImage: selectedBook.value.image,
+          bookPage: selectedBook.value.totalPage || 0,
           categoryId: 0,
         })
         console.debug('createPost', data)
         root.$router.push({
-        path: `/${data.id}`,
-      })
+          path: `/${data.id}`,
+        })
         isOpenedConfirm.value = false
       } catch (e) {
         console.error(e)
