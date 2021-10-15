@@ -1,7 +1,9 @@
 <template>
-  <div>
-    <div class="text-2xl">Posts</div>
-    <PostCards />
+  <div class="grid grid-cols-12">
+    <div class="col-start-2 col-span-10">
+      <div class="text-2xl">Posts</div>
+      <PostCards />
+    </div>
   </div>
 </template>
 <script>

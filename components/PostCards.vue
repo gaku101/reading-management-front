@@ -1,60 +1,64 @@
-    <template>
-  <div class="container mx-auto">
-    <div class="flex flex-wrap mx-4">
-      <div
-        v-for="post in posts"
-        :key="post.id"
-        class="w-full sm:w-1/2 md:w-1/2 xl:w-1/4 p-4"
+<template>
+  <div class="flex flex-wrap mt-10">
+    <div
+      v-for="post in posts"
+      :key="post.id"
+      class="w-full sm:w-1/2 md:w-1/2 xl:w-1/4 mx-4"
+    >
+      <NuxtLink
+        :to="`/${post.id}`"
+        class="
+          block
+          bg-white
+          shadow-md
+          hover:shadow-xl
+          rounded-lg
+          overflow-hidden
+          p-4
+        "
       >
-        <NuxtLink
-          :to="`/${post.id}`"
-          class="
-            block
-            bg-white
-            shadow-md
-            hover:shadow-xl
-            rounded-lg
-            overflow-hidden
-          "
-        >
-          <div class="p-4">
-            <div class="flex place-content-between">
-              <div>
-                <span
-                  v-if="post.category.id"
-                  class="
-                    inline-block
-                    px-2
-                    py-1
-                    leading-none
-                    rounded-full
-                    font-semibold
-                    uppercase
-                    tracking-wide
-                    text-xs
-                  "
-                  :class="categoryColor(post.category.id)"
-                  >{{ post.category.name }}</span
-                >
-                <span v-else class="inline-block" />
-              </div>
-              <NuxtLink
-                :to="`/user/${post.author}`"
-                class="hover:opacity-50 flex place-items-center"
-                v-if="!isRoot"
-              >
-                <span class="mr-2">{{ post.author }}</span>
-                <ProfileImage class="w-7 h-7" :url="post.authorImage" />
-              </NuxtLink>
-            </div>
-            <h2 class="mt-2 mb-2 font-bold">
-              {{ post.title }}
-            </h2>
-            <p class="text-sm new-line leading-6" v-text="post.body">
-              {{ post.body }}
-            </p>
+        <div class="flex place-content-between">
+          <div>
+            <span
+              v-if="post.category.id"
+              class="
+                inline-block
+                px-2
+                py-1
+                leading-none
+                rounded-full
+                font-semibold
+                uppercase
+                tracking-wide
+                text-xs
+              "
+              :class="categoryColor(post.category.id)"
+              >{{ post.category.name }}</span
+            >
+            <span v-else class="inline-block" />
           </div>
-          <div class="p-4 flex items-center text-sm text-gray-600 justify-end">
+          <NuxtLink
+            :to="`/user/${post.author}`"
+            class="hover:opacity-50 flex place-items-center"
+            v-if="!isRoot"
+          >
+            <span class="mr-2">{{ post.author }}</span>
+            <ProfileImage class="w-7 h-7" :url="post.authorImage" />
+          </NuxtLink>
+        </div>
+        <div class="flex grid grid-cols-12 mt-4">
+          <img :src="post.bookImage" alt="postImage" class="col-span-3 h-24" />
+          <div class="col-span-9 px-2">
+            <div>
+              {{ post.title }}
+            </div>
+            <div class="text-gray-500">
+              {{ post.bookAuthor }}
+            </div>
+          </div>
+        </div>
+        <div class="flex place-items-center mt-4">
+          <div class="flex items-center text-sm text-gray-600">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-6 w-6 fill-current text-yellow-300"
@@ -84,13 +88,13 @@
                 d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
               />
             </svg>
-            <span class="ml-2">{{post.commentsNum}}</span>
+            <span class="ml-2">{{ post.commentsNum }}</span>
           </div>
-          <div class="p-4 flex items-center text-sm text-gray-600 justify-end">
+          <div class="text-sm text-gray-600 ml-auto">
             {{ $dayjs(post.created_at).format('YYYY/MM/DD HH:mm') }}
           </div>
-        </NuxtLink>
-      </div>
+        </div>
+      </NuxtLink>
     </div>
   </div>
 </template>
