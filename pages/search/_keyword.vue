@@ -54,10 +54,10 @@ export default defineComponent({
         })
         .then((data) => {
           const res = []
-          for (let b of data.items) {
-            let authors = b.volumeInfo.authors
-            let price = b.saleInfo.listPrice
-            let img = b.volumeInfo.imageLinks
+          for (const b of data.items) {
+            const authors = b.volumeInfo.authors
+            const price = b.saleInfo.listPrice
+            const img = b.volumeInfo.imageLinks
             res.push({
               id: b.id,
               title: b.volumeInfo.title,

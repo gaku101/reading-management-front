@@ -1,6 +1,7 @@
 <template>
   <div>
     <Post />
+    <Notes />
     <Comments />
   </div>
 </template>
