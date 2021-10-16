@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-md container mx-auto mt-20">
+  <div class="max-w-md container mx-auto mt-20 h-screen">
     <div class="grid grid-cols-3 place-items-center">
       <ProfileImage :url="user.image" class="col-span-3 w-24 h-24" />
       <div v-if="user.username" class="col-span-3 mt-6 text-2xl">

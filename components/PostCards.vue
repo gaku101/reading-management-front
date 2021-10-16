@@ -3,7 +3,7 @@
     <div
       v-for="post in posts"
       :key="post.id"
-      class="w-full sm:w-1/2 md:w-1/2 xl:w-1/4 mx-4"
+      class="w-full sm:w-1/2 md:w-1/4 xl:w-1/4 mx-4"
     >
       <NuxtLink
         :to="`/${post.id}`"
@@ -47,7 +47,7 @@
           </NuxtLink>
         </div>
         <div class="flex grid grid-cols-12 mt-4">
-          <img :src="post.bookImage" alt="postImage" class="col-span-3 h-24" />
+          <img :src="post.bookImage" alt="postImage" class="col-span-3 h-24 md:h-16" />
           <div class="col-span-9 px-2">
             <div>
               {{ post.title }}

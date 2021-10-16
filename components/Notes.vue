@@ -97,7 +97,7 @@
               sm:w-auto
               sm:text-sm
             "
-            @click="updatePost"
+            @click="updateNote(note.id, note.body)"
           >
             Update
           </button>
@@ -124,7 +124,7 @@
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            @click="openConfirm"
+            @click="openConfirm(note.id)"
           >
             <path
               stroke-linecap="round"
@@ -178,11 +178,38 @@ export default defineComponent({
       () => user.value.username === notes.value!.author
     )
     const isOpenedConfirm = ref(false)
-    const openConfirm = () => {
+    const selectedNote = ref(0)
+    const openConfirm = (id: number) => {
+      selectedNote.value = id
       isOpenedConfirm.value = true
     }
     const note = ref('')
-    const deleteNote = () => {}
+    const updateNote = async (id: number, body: string) => {
+      try {
+        const { data } = await root.$axios.put('/api/notes', {
+          id,
+          body,
+          // page: page.value,
+          // line: line.value,
+        })
+        console.log('updateNote', data)
+        isEditing.value = false
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    const deleteNote = async () => {
+      try {
+        await root.$axios.delete(
+          `/api/notes/${selectedNote.value}`
+        )
+        notes. value = notes.value.filter((note: any) => note.id !== selectedNote.value)
+        selectedNote.value = 0
+        isOpenedConfirm.value = false
+      } catch (e) {
+        console.error(e)
+      }
+    }
     const createNote = async () => {
       try {
         const { data } = await root.$axios.post('/api/notes', {
@@ -204,9 +231,10 @@ export default defineComponent({
       isLoginedUser,
       isOpenedConfirm,
       openConfirm,
+      updateNote,
       deleteNote,
       createNote,
-      note
+      note,
     }
   },
 })
