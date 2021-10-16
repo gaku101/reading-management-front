@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="h-screen">
     <div class="text-2xl">Following</div>
     <div class="flex flex-wrap justify-around mx-4 my-8">
       <NuxtLink

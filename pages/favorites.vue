@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="h-screen">
     <div class="text-2xl">Favorites</div>
     <PostCards />
   </div>
