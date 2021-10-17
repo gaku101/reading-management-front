@@ -313,8 +313,8 @@ export default defineComponent({
         console.error(e)
       }
     }
-    const page = ref(0)
-    const line = ref(0)
+    const page = ref()
+    const line = ref()
     const createNote = async () => {
       try {
         const { data } = await root.$axios.post('/api/notes', {
@@ -331,7 +331,7 @@ export default defineComponent({
       }
     }
     const removeZero = (e: any) => {
-      if (e.target.value == 0) {
+      if (e.target.value === "0") {
         console.log('removeZero', e.target.value)
         e.target.value = null
       }
