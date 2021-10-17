@@ -9,130 +9,232 @@
         placeholder="Write note here..."
         v-model="note"
       ></textarea>
-      <button
-        type="button"
-        class="
-          block
-          rounded-md
-          border border-transparent
-          shadow-sm
-          px-4
-          py-2
-          bg-blue-500
-          font-medium
-          text-white
-          hover:bg-blue-600
-          focus:outline-none
-          focus:ring-2 focus:ring-offset-2 focus:ring-red-500
-          sm:w-auto
-          sm:text-sm
-          ml-auto
-          mt-10
-        "
-        @click="createNote"
-      >
-        Send
-      </button>
-      <div v-for="note in notes" :key="note.id" class="grid grid-cols-10 flex">
-        <div
-          v-if="!isEditing"
-          class="col-span-9 new-line leading-9 mt-8 text-lg"
-          v-text="note.body"
-        />
+      <div class="flex place-items-center mt-2">
+        <div>
+          <input
+            v-model="page"
+            class="
+              border-2 border-gray-300
+              bg-white
+              h-10
+              pr-2
+              rounded-lg
+              text-sm
+              focus:outline-none
+              text-right
+            "
+            size="5"
+            name="page"
+            placeholder="page"
+            type="text"
+            inputmode="numeric"
+            @click="removeZero"
+          />
+          <span class="ml-1">ページ</span>
+          <input
+            v-model="line"
+            class="
+              border-2 border-gray-300
+              bg-white
+              h-10
+              ml-4
+              pr-2
+              rounded-lg
+              text-sm
+              focus:outline-none
+              text-right
+            "
+            size="5"
+            name="line"
+            placeholder="line"
+            type="text"
+            inputmode="numeric"
+            @click="removeZero"
+          />
+          <span class="ml-1">行</span>
+        </div>
+        <button
+          type="button"
+          class="
+            block
+            rounded-md
+            border border-transparent
+            shadow-sm
+            px-4
+            py-2
+            bg-blue-500
+            font-medium
+            text-white
+            hover:bg-blue-600
+            focus:outline-none
+            focus:ring-2
+            focus:ring-offset-2
+            focus:ring-red-500
+            sm:w-auto sm:text-sm
+            ml-auto
+          "
+          @click="createNote"
+        >
+          Send
+        </button>
+      </div>
+      <div v-for="note in notes" :key="note.id">
         <textarea
-          v-else
+          v-if="isEditing && note.id == selectedNote"
           rows="3"
-          class="col-span-10 block w-full bg-gray mt-8 leading-9 text-lg"
+          class="block w-full bg-gray mt-8 leading-9 text-lg"
           placeholder="Write body here..."
           v-model="note.body"
         ></textarea>
-        <div v-if="isEditing" class="col-span-10 my-6 flex ml-auto">
-          <button
-            type="button"
-            class="
-              mt-3
-              w-full
-              inline-flex
-              justify-center
-              rounded-md
-              border border-gray-300
-              shadow-sm
-              px-4
-              py-2
-              bg-white
-              text-base
-              font-medium
-              text-gray-700
-              hover:bg-gray-50
-              focus:outline-none
-              focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
-              sm:mt-0
-              sm:ml-3
-              sm:w-auto
-              sm:text-sm
-            "
-            @click="cancelEditing"
-          >
-            Cancel
-          </button>
-          <button
-            type="button"
-            class="
-              w-full
-              inline-flex
-              justify-center
-              rounded-md
-              border border-transparent
-              shadow-sm
-              px-4
-              py-2
-              bg-blue-500
-              text-base
-              font-medium
-              text-white
-              hover:bg-blue-600
-              focus:outline-none
-              focus:ring-2 focus:ring-offset-2 focus:ring-red-500
-              sm:ml-3
-              sm:w-auto
-              sm:text-sm
-            "
-            @click="updateNote(note.id, note.body)"
-          >
-            Update
-          </button>
-        </div>
-        <div v-if="!isEditing" class="col-span-1 flex justify-end self-end">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 inline-block mt-4 text-blue-600"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            @click="openEditor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+        <div
+          v-else
+          class="new-line leading-9 mt-8 text-lg"
+          v-text="note.body"
+        />
+        <div class="place-items-center flex justify-between mt-2">
+          <div v-if="isEditing && note.id == selectedNote">
+            <input
+              v-model="note.page"
+              class="
+                border-2 border-gray-300
+                bg-white
+                h-10
+                pr-2
+                rounded-lg
+                text-sm
+                focus:outline-none
+                text-right
+              "
+              size="5"
+              name="page"
+              placeholder="page"
+              type="text"
+              inputmode="numeric"
+              @click="removeZero"
             />
-          </svg>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 inline-block mt-4 ml-4 text-gray-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            @click="openConfirm(note.id)"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+            <span class="ml-1">ページ</span>
+            <input
+              v-model="note.line"
+              class="
+                border-2 border-gray-300
+                bg-white
+                h-10
+                ml-4
+                pr-2
+                rounded-lg
+                text-sm
+                focus:outline-none
+                text-right
+              "
+              size="5"
+              name="line"
+              placeholder="line"
+              type="text"
+              inputmode="numeric"
+              @click="removeZero"
             />
-          </svg>
+            <span class="ml-1">行</span>
+          </div>
+          <div v-else-if="note.page" class="flex text-lg">
+            <div>
+              <span class="text-blue-600">{{ note.page }}</span
+              >&nbsp;ページ&nbsp;
+            </div>
+            <span class="text-gray-400">/&nbsp;</span>
+            <div>
+              <span class="text-blue-500">{{ note.line }}</span
+              >&nbsp;行目
+            </div>
+          </div>
+          <div v-else />
+
+          <div v-if="isEditing && note.id == selectedNote" class="flex ml-auto">
+            <button
+              type="button"
+              class="
+                mt-3
+                w-full
+                inline-flex
+                justify-center
+                rounded-md
+                border border-gray-300
+                shadow-sm
+                px-4
+                py-2
+                bg-white
+                text-base
+                font-medium
+                text-gray-700
+                hover:bg-gray-50
+                focus:outline-none
+                focus:ring-2
+                focus:ring-offset-2
+                focus:ring-indigo-500
+                sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm
+              "
+              @click="cancelEditing"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="
+                w-full
+                inline-flex
+                justify-center
+                rounded-md
+                border border-transparent
+                shadow-sm
+                px-4
+                py-2
+                bg-blue-500
+                text-base
+                font-medium
+                text-white
+                hover:bg-blue-600
+                focus:outline-none
+                focus:ring-2
+                focus:ring-offset-2
+                focus:ring-red-500
+                sm:ml-3 sm:w-auto sm:text-sm
+              "
+              @click="updateNote(note)"
+            >
+              Update
+            </button>
+          </div>
+          <div v-else class="flex">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 inline-block text-blue-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              @click="openEditor(note.id)"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+              />
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 inline-block ml-4 text-gray-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              @click="openConfirm(note.id)"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              />
+            </svg>
+          </div>
         </div>
       </div>
     </div>
@@ -152,7 +254,8 @@ export default defineComponent({
   setup(_, { root }) {
     const user = computed(() => root.$store.getters['user/user'])
     const isEditing = ref(false)
-    const openEditor = () => {
+    const openEditor = (id: number) => {
+      selectedNote.value = id
       isEditing.value = true
     }
     const cancelEditing = () => {
@@ -184,13 +287,13 @@ export default defineComponent({
       isOpenedConfirm.value = true
     }
     const note = ref('')
-    const updateNote = async (id: number, body: string) => {
+    const updateNote = async (note: any) => {
       try {
         const { data } = await root.$axios.put('/api/notes', {
-          id,
-          body,
-          // page: page.value,
-          // line: line.value,
+          id: note.id,
+          body: note.body,
+          page: parseInt(note.page),
+          line: parseInt(note.line),
         })
         console.log('updateNote', data)
         isEditing.value = false
@@ -200,27 +303,37 @@ export default defineComponent({
     }
     const deleteNote = async () => {
       try {
-        await root.$axios.delete(
-          `/api/notes/${selectedNote.value}`
+        await root.$axios.delete(`/api/notes/${selectedNote.value}`)
+        notes.value = notes.value.filter(
+          (note: any) => note.id !== selectedNote.value
         )
-        notes. value = notes.value.filter((note: any) => note.id !== selectedNote.value)
         selectedNote.value = 0
         isOpenedConfirm.value = false
       } catch (e) {
         console.error(e)
       }
     }
+    const page = ref(0)
+    const line = ref(0)
     const createNote = async () => {
       try {
         const { data } = await root.$axios.post('/api/notes', {
           postId,
           body: note.value,
+          page: page.value,
+          line: page.value,
         })
         console.log('createComment', data)
         note.value = ''
         listNotes()
       } catch (e) {
         console.error(e)
+      }
+    }
+    const removeZero = (e: any) => {
+      if (e.target.value == 0) {
+        console.log('removeZero', e.target.value)
+        e.target.value = null
       }
     }
     return {
@@ -235,6 +348,10 @@ export default defineComponent({
       deleteNote,
       createNote,
       note,
+      selectedNote,
+      page,
+      line,
+      removeZero,
     }
   },
 })
