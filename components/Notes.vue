@@ -277,9 +277,6 @@ export default defineComponent({
       }
     }
     listNotes()
-    const isLoginedUser = computed(
-      () => user.value.username === notes.value!.author
-    )
     const isOpenedConfirm = ref(false)
     const selectedNote = ref(0)
     const openConfirm = (id: number) => {
@@ -331,7 +328,7 @@ export default defineComponent({
       }
     }
     const removeZero = (e: any) => {
-      if (e.target.value === "0") {
+      if (e.target.value === '0') {
         console.log('removeZero', e.target.value)
         e.target.value = null
       }
@@ -341,7 +338,6 @@ export default defineComponent({
       isEditing,
       openEditor,
       cancelEditing,
-      isLoginedUser,
       isOpenedConfirm,
       openConfirm,
       updateNote,

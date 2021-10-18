@@ -1,18 +1,20 @@
 <template>
-  <div class="h-screen">
-    <div class="text-2xl">Following</div>
-    <div class="flex flex-wrap justify-around mx-4 my-8">
-      <NuxtLink
-        v-for="user in users"
-        :key="user.id"
-        :to="`user/${user.username}`"
-        class="sm:w-1/4 md:w-1/4 xl:w-1/4 hover:opacity-50"
-      >
-        <ProfileImage :url="user.image" class="w-32 h-32 mx-auto" />
-        <div class="mx-auto text-center mt-2 text-lg">
-          {{ user.username }}
-        </div>
-      </NuxtLink>
+  <div class="grid grid-cols-12 h-screen">
+    <div class="col-start-2 col-span-10">
+      <div class="text-2xl">Following</div>
+      <div class="flex flex-wrap justify-around mx-4 my-8">
+        <NuxtLink
+          v-for="user in users"
+          :key="user.id"
+          :to="`user/${user.username}`"
+          class="sm:w-1/4 md:w-1/4 xl:w-1/4 hover:opacity-50"
+        >
+          <ProfileImage :url="user.image" class="w-32 h-32 mx-auto" />
+          <div class="mx-auto text-center mt-2 text-lg">
+            {{ user.username }}
+          </div>
+        </NuxtLink>
+      </div>
     </div>
   </div>
 </template>
