@@ -5,7 +5,86 @@
         <div class="col-span-2">
           <img :src="post.bookImage" alt="postImage" class="w-full" />
         </div>
-        <div class="col-span-10 pt-4 pl-6">
+        <div class="col-span-10 pl-6">
+          <div class="flex place-items-center justify-between mb-2">
+            <div v-if="!isEditing" class="text-gray-500">
+              <span>Category:&nbsp;</span>
+              <span
+                v-if="post.category.id"
+                class="
+                  mt-4
+                  px-2
+                  py-1
+                  leading-none
+                  rounded-full
+                  font-semibold
+                  uppercase
+                  tracking-wide
+                  text-xs
+                "
+                :class="categoryColor(post.category.id)"
+                >{{ post.category.name }}</span
+              >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 ml-1 inline-block text-blue-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                @click="openEditor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                />
+              </svg>
+            </div>
+            <div v-else class="flex place-items-center">
+              <CategorySelect v-model="selectedCategory" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 pl-1 text-gray-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                @click="isEditing = false"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </div>
+            <div class="flex place-items-center">
+              <div class="text-gray-500 mr-4">
+                User:&nbsp;
+                <NuxtLink to="" class="text-red-400">
+                  {{ post.author }}
+                </NuxtLink>
+              </div>
+              <svg
+                v-if="!isLoginedUser"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-8 w-8 text-yellow-300"
+                :class="isFavorite ? 'fill-current' : ''"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                @click="toggleFavorite"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+                />
+              </svg>
+            </div>
+          </div>
           <div class="font-bold text-3xl text-gray-800">
             {{ post.title }}
           </div>
@@ -14,56 +93,6 @@
           </div>
         </div>
       </div>
-      <div v-if="!isEditing" class="flex place-content-evenly mt-8">
-        <div class="text-gray-500">
-          User:&nbsp;
-          <NuxtLink to="" class="text-red-400">
-            {{ post.author }}
-          </NuxtLink>
-        </div>
-        <div class="text-gray-500">
-          Category:&nbsp;
-          <span
-            v-if="post.category.id"
-            class="
-              mt-4
-              px-2
-              py-1
-              leading-none
-              rounded-full
-              font-semibold
-              uppercase
-              tracking-wide
-              text-xs
-            "
-            :class="categoryColor(post.category.id)"
-            >{{ post.category.name }}</span
-          >
-        </div>
-        <svg
-          v-if="!isLoginedUser"
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6 ml-auto mt-4 text-yellow-300"
-          :class="isFavorite ? 'fill-current' : ''"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          @click="addFavorite"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
-          />
-        </svg>
-      </div>
-      <CategorySelect
-        v-else
-        class="mt-4 flex justify-end"
-        v-model="selectedCategory"
-      />
-      <!-- <hr class="mt-2" /> -->
     </div>
 
     <ConfirmDialog
@@ -75,23 +104,32 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref } from '@vue/composition-api'
+import { computed, defineComponent, ref, watch } from '@vue/composition-api'
 import { categoryColor } from '@/utils/categoryColor'
 
 export default defineComponent({
   name: 'Post',
-  setup(_, { root }) {
+  setup(_, { root, emit }) {
     const username = computed(() => root.$store.getters['user/username'])
     const user = computed(() => root.$store.getters['user/user'])
     const selectedCategory = ref(0)
+    watch(selectedCategory, () => {
+      console.debug('selectedCategory', selectedCategory.value)
+      updatePost()
+    })
     const postId = parseInt(root.$route.params.postId)
     const post = ref<Post>()
     const getPost = async () => {
-      const { data } = await root.$axios.get(`/api/posts/${postId}`)
-      console.log('getPost', data)
-      post.value = data
-      selectedCategory.value = data.category.id
-      console.log('selectedCategory', selectedCategory.value)
+      try {
+        const { data } = await root.$axios.get(`/api/posts/${postId}`)
+        console.log('getPost', data)
+        post.value = data
+        selectedCategory.value = data.category.id
+        console.log('selectedCategory', selectedCategory.value)
+        emit('get-author', data.author)
+      } catch (e) {
+        console.error(e)
+      }
     }
     getPost()
     const isLoginedUser = computed(() => username.value === post.value!.author)
@@ -109,7 +147,7 @@ export default defineComponent({
         })
         console.log('data', data)
         isEditing.value = false
-        getPost()
+        Object.assign(post.value?.category, data.category)
       } catch (e) {
         console.error(e)
       }
@@ -128,6 +166,9 @@ export default defineComponent({
       }
     }
     getFavorite()
+    const toggleFavorite = () => {
+      isFavorite.value ? deleteFavorite() : addFavorite()
+    }
     const addFavorite = async () => {
       try {
         const { data } = await root.$axios.post('/api/post-favorite', {
@@ -136,6 +177,14 @@ export default defineComponent({
         })
         console.log('addFavorite', data)
         isFavorite.value = true
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    const deleteFavorite = async () => {
+      try {
+        await root.$axios.delete(`/api/post-favorite/${postId}`)
+        isFavorite.value = false
       } catch (e) {
         console.error(e)
       }
@@ -167,6 +216,7 @@ export default defineComponent({
       openConfirm,
       isOpenedConfirm,
       deletePost,
+      toggleFavorite,
     }
   },
 })
