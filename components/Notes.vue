@@ -252,7 +252,6 @@ import { computed, defineComponent, ref } from '@vue/composition-api'
 export default defineComponent({
   name: 'Notes',
   setup(_, { root }) {
-    const user = computed(() => root.$store.getters['user/user'])
     const isEditing = ref(false)
     const openEditor = (id: number) => {
       selectedNote.value = id

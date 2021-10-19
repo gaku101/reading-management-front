@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-md container mx-auto mt-20">
+  <div class="max-w-md container mx-auto mt-20 h-screen">
     <div class="grid grid-cols-3 place-items-center">
       <div
         class="col-span-3 relative pb-3"
@@ -74,12 +74,50 @@
       <div v-if="points !== null" class="col-span-3 mt-6 text-md text-blue-400">
         Newbie&nbsp;&nbsp;|&nbsp;&nbsp;{{ points }} points
       </div>
+      <button
+        class="
+          col-span-3
+          bg-transparent
+          text-red-400 text-xs
+          font-semibold
+          py-1
+          px-4
+          rounded-lg
+          mt-3
+          flex
+          place-items-center
+          hover:opacity-70
+        "
+        @click="isOpenedConfirm = true"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="inline-block h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <span>Delete your account</span>
+      </button>
     </div>
     <ProfileEditor
       :is-opened="isOpenedEditProfile"
       :cancel-action="() => (isOpenedEditProfile = false)"
       :user="user"
     />
+    <ConfirmDialog
+      :is-opened="isOpenedConfirm"
+      :cancel-action="() => (isOpenedConfirm = false)"
+      :ok-action="deleteUser"
+      >Are you sure you want to delete your account?</ConfirmDialog
+    >
   </div>
 </template>
 
@@ -97,11 +135,15 @@ export default defineComponent({
 
     const isOpenedEditProfile = ref(false)
     const getAccount = async () => {
-      const { data } = await root.$axios.get(
-        `/api/accounts/by/${username.value}`
-      )
-      console.log('getAccount', data)
-      points.value = data.balance
+      try {
+        const { data } = await root.$axios.get(
+          `/api/accounts/by/${username.value}`
+        )
+        console.log('getAccount', data)
+        points.value = data.balance
+      } catch (e) {
+        console.error(e)
+      }
     }
     const isShowedEditAvatar = ref(false)
     getAccount()
@@ -136,6 +178,17 @@ export default defineComponent({
         console.error(e)
       }
     }
+    const isOpenedConfirm = ref(false)
+    const deleteUser = async () => {
+      try {
+        await root.$axios.delete(`/api/users/${user.value.username}`)
+        root.$router.push({
+          path: '/sign-up',
+        })
+      } catch (e) {
+        console.error(e)
+      }
+    }
     return {
       user,
       username,
@@ -143,6 +196,8 @@ export default defineComponent({
       isOpenedEditProfile,
       isShowedEditAvatar,
       editAvatar,
+      isOpenedConfirm,
+      deleteUser,
     }
   },
 })

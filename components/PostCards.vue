@@ -47,7 +47,11 @@
           </NuxtLink>
         </div>
         <div class="flex grid grid-cols-12 mt-4">
-          <img :src="post.bookImage" alt="postImage" class="col-span-3 h-24 md:h-16" />
+          <img
+            :src="post.bookImage ? post.bookImage : '../assets/no-image.png'"
+            alt="postImage"
+            class="col-span-3 h-24 md:h-16"
+          />
           <div class="col-span-9 px-2">
             <div>
               {{ post.title }}

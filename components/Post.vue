@@ -3,7 +3,11 @@
     <div v-if="post" class="col-start-2 col-span-10 mt-8">
       <div class="grid grid-cols-12 flex">
         <div class="col-span-2">
-          <img :src="post.bookImage" alt="postImage" class="w-full" />
+          <img
+            :src="post.bookImage ? post.bookImage : '../assets/no-image.png'"
+            alt="postImage"
+            class="w-full"
+          />
         </div>
         <div class="col-span-10 pl-6">
           <div class="flex place-items-center justify-between mb-2">
@@ -62,12 +66,28 @@
             <div class="flex place-items-center">
               <div class="text-gray-500 mr-4">
                 User:&nbsp;
-                <NuxtLink to="" class="text-red-400">
+                <NuxtLink :to="`/user/${post.author}`" class="text-red-400">
                   {{ post.author }}
                 </NuxtLink>
               </div>
               <svg
-                v-if="!isLoginedUser"
+                v-if="isLoginedUser"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-gray-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                @click="isOpenedConfirm = true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
+              </svg>
+              <svg
+                v-else
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-8 w-8 text-yellow-300"
                 :class="isFavorite ? 'fill-current' : ''"
