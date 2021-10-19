@@ -10,7 +10,11 @@
           @click="selectBook(book)"
         >
           <div class="col-span-1 p-1">
-            <img :src="book.image" alt="bookImage" class="h-32" />
+            <img
+              :src="book.image ? book.image : '../../assets/no-image.png'"
+              alt="bookImage"
+              class="h-32"
+            />
           </div>
           <div class="col-span-11 p-2 pl-4">
             <div class="text-lg text-red-400">{{ book.title }}</div>
