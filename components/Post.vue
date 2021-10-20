@@ -9,7 +9,7 @@
             class="w-full"
           />
         </div>
-        <div class="col-span-10 pl-6">
+        <div class="col-span-10 grid grid-rows-6 pl-6">
           <div class="flex place-items-center justify-between mb-2">
             <div v-if="!isEditing" class="text-gray-500">
               <span>Category:&nbsp;</span>
@@ -111,6 +111,44 @@
           <div class="text-2xl text-red-400 mt-2">
             {{ post.bookAuthor }}
           </div>
+          <div class="row-start-6 flex place-items-center text-lg">
+            <div
+              v-if="!isEditingPage"
+              class="hover:opacity-50"
+              @click="isEditingPage = true"
+            >
+              <span class="text-gray-500">{{ post.bookPageRead }}</span>
+              &nbsp;page
+            </div>
+            <input
+              v-else
+              v-model="post.bookPageRead"
+              class="
+                border-2 border-gray-300
+                bg-white
+                h-10
+                pr-2
+                rounded-lg
+                text-sm
+                focus:outline-none
+                text-right
+              "
+              size="5"
+              name="page"
+              placeholder="page"
+              type="text"
+              inputmode="numeric"
+              autofocus
+              @blur="updatePost"
+              @keyup.enter="updatePost"
+              @click="removeZero"
+            />
+            <div>&nbsp;/&nbsp;</div>
+            <div>
+              <span class="text-blue-700">{{ post.bookPage }}</span>
+              &nbsp;page
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -126,6 +164,7 @@
 <script lang="ts">
 import { computed, defineComponent, ref, watch } from '@vue/composition-api'
 import { categoryColor } from '@/utils/categoryColor'
+import { removeZero } from '@/utils/number'
 
 export default defineComponent({
   name: 'Post',
@@ -159,14 +198,18 @@ export default defineComponent({
     }
     const updatePost = async () => {
       try {
+        if (typeof post.value?.bookPageRead === 'string') {
+          post.value.bookPageRead = parseInt(post.value?.bookPageRead)
+        }
         const { data } = await root.$axios.put('/api/posts', {
           id: postId,
           author: username.value,
-          title: post.value!.title,
+          BookPageRead: post.value?.bookPageRead || 0,
           categoryId: selectedCategory.value,
         })
         console.log('data', data)
         isEditing.value = false
+        isEditingPage.value = false
         Object.assign(post.value?.category, data.category)
       } catch (e) {
         console.error(e)
@@ -222,6 +265,7 @@ export default defineComponent({
         console.error(e)
       }
     }
+    const isEditingPage = ref(false)
     return {
       post,
       categoryColor,
@@ -237,6 +281,8 @@ export default defineComponent({
       isOpenedConfirm,
       deletePost,
       toggleFavorite,
+      isEditingPage,
+      removeZero,
     }
   },
 })

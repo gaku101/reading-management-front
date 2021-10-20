@@ -16,4 +16,5 @@ declare interface Post {
     id :number
     name: string
   }
+  bookPageRead: number
 }

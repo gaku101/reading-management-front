@@ -21,8 +21,7 @@
               px-3
               text-gray-700
               leading-tight
-              focus:outline-none
-              focus:shadow-outline
+              focus:outline-none focus:shadow-outline
             "
             id="username"
             type="text"
@@ -50,8 +49,7 @@
               px-3
               text-gray-700
               leading-tight
-              focus:outline-none
-              focus:shadow-outline
+              focus:outline-none focus:shadow-outline
             "
             id="password"
             type="password"
@@ -82,8 +80,7 @@
               py-2
               px-4
               rounded
-              focus:outline-none
-              focus:shadow-outline
+              focus:outline-none focus:shadow-outline
             "
             type="button"
             :disabled="validate"
@@ -139,7 +136,7 @@ export default defineComponent({
           localStorage.setItem('username', data.user.username)
           root.$router.push('/')
         }
-      } catch (e) {
+      } catch (e: any) {
         const { data } = e.response
         console.error(data)
         if (data) {

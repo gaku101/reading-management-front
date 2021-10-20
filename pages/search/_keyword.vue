@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-12">
+  <div class="grid grid-cols-12 h-screen">
     <div class="col-start-3 col-span-8 mt-20">
       <div class="text-3xl text-gray-600 mb-10">{{ keyword }}の検索結果</div>
       <div class="shadow-md rounded bg-white">
