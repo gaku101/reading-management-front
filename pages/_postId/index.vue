@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="h-screen">
     <Post @get-author="author = $event" />
     <Notes v-if="isLoginedUser" />
     <Comments />

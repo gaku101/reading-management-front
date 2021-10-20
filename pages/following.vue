@@ -28,11 +28,15 @@ export default defineComponent({
     const pageSize = 30
     const users = ref<UserState[]>()
     const listFollowingUsers = async () => {
-      const { data } = await root.$axios.get(
-        `/api/follow?page_id=${pageId}&page_size=${pageSize}`
-      )
-      users.value = data
-      console.log('listFollowingUsers', users.value)
+      try {
+        const { data } = await root.$axios.get(
+          `/api/follow?page_id=${pageId}&page_size=${pageSize}`
+        )
+        users.value = data
+        console.log('listFollowingUsers', users.value)
+      } catch (e) {
+        console.error(e)
+      }
     }
     listFollowingUsers()
     return {

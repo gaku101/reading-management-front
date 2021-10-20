@@ -248,6 +248,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api'
+import { removeZero } from '@/utils/number'
 
 export default defineComponent({
   name: 'Notes',
@@ -324,12 +325,6 @@ export default defineComponent({
         listNotes()
       } catch (e) {
         console.error(e)
-      }
-    }
-    const removeZero = (e: any) => {
-      if (e.target.value === '0') {
-        console.log('removeZero', e.target.value)
-        e.target.value = null
       }
     }
     return {
