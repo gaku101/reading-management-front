@@ -267,7 +267,7 @@ export default defineComponent({
         })
         console.log('signUp', data)
         signIn()
-      } catch (e) {
+      } catch (e:any) {
         const { data } = e.response
         console.error(data)
         if (
@@ -298,8 +298,4 @@ export default defineComponent({
   },
 })
 </script>
-<style scoped>
-button:disabled {
-  background: #ccc;
-}
-</style>
+

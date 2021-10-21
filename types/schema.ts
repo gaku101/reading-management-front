@@ -10,11 +10,13 @@ declare interface Post {
   id: number
   author: string
   title: string
-  body: string
   created_at: any
-  category:{
-    id :number
+  category: {
+    id: number
     name: string
   }
+  bookAuthor: string
+  bookImage: string
+  bookPage: number
   bookPageRead: number
 }

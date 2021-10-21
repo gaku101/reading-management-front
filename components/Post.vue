@@ -111,11 +111,11 @@
           <div class="text-2xl text-red-400 mt-2">
             {{ post.bookAuthor }}
           </div>
-          <div class="row-start-6 flex place-items-center text-lg">
+          <div class="row-start-5 flex place-items-center text-lg">
             <div
               v-if="!isEditingPage"
               class="hover:opacity-50"
-              @click="isEditingPage = true"
+              @click="updatePage"
             >
               <span class="text-gray-500">{{ post.bookPageRead }}</span>
               &nbsp;page
@@ -149,6 +149,9 @@
               &nbsp;page
             </div>
           </div>
+          <div class="row-start-6 place-items-start text-red-400 text-xs">
+            {{ pageValidation }}
+          </div>
         </div>
       </div>
     </div>
@@ -162,9 +165,16 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref, watch } from '@vue/composition-api'
+import {
+  computed,
+  defineComponent,
+  reactive,
+  ref,
+  watch,
+} from '@vue/composition-api'
 import { categoryColor } from '@/utils/categoryColor'
 import { removeZero } from '@/utils/number'
+import useValidationRules from '@/utils/useValidation'
 
 export default defineComponent({
   name: 'Post',
@@ -177,12 +187,25 @@ export default defineComponent({
       updatePost()
     })
     const postId = parseInt(root.$route.params.postId)
-    const post = ref<Post>()
+    const post: Post = reactive({
+      id: 0,
+      author: '',
+      title: '',
+      created_at: '',
+      category: {
+        id: 0,
+        name: '',
+      },
+      bookAuthor: '',
+      bookImage: '',
+      bookPage: 0,
+      bookPageRead: 0,
+    })
     const getPost = async () => {
       try {
         const { data } = await root.$axios.get(`/api/posts/${postId}`)
         console.log('getPost', data)
-        post.value = data
+        Object.assign(post, data)
         selectedCategory.value = data.category.id
         console.log('selectedCategory', selectedCategory.value)
         emit('get-author', data.author)
@@ -191,26 +214,33 @@ export default defineComponent({
       }
     }
     getPost()
-    const isLoginedUser = computed(() => username.value === post.value!.author)
+    const isLoginedUser = computed(() => username.value === post!.author)
     const isEditing = ref(false)
     const openEditor = () => {
       isEditing.value = true
     }
     const updatePost = async () => {
+      if (!validation.value) {
+        post.bookPageRead = stashedPageRead.value
+        pageValidation.value = ''
+        isEditing.value = false
+        isEditingPage.value = false
+        return
+      }
       try {
-        if (typeof post.value?.bookPageRead === 'string') {
-          post.value.bookPageRead = parseInt(post.value?.bookPageRead)
+        if (typeof post?.bookPageRead === 'string') {
+          post.bookPageRead = parseInt(post?.bookPageRead)
         }
         const { data } = await root.$axios.put('/api/posts', {
           id: postId,
           author: username.value,
-          BookPageRead: post.value?.bookPageRead || 0,
+          BookPageRead: post?.bookPageRead || 0,
           categoryId: selectedCategory.value,
         })
         console.log('data', data)
         isEditing.value = false
         isEditingPage.value = false
-        Object.assign(post.value?.category, data.category)
+        Object.assign(post?.category, data.category)
       } catch (e) {
         console.error(e)
       }
@@ -266,6 +296,19 @@ export default defineComponent({
       }
     }
     const isEditingPage = ref(false)
+    const { pageRules } = useValidationRules()
+    const pageValidation = ref('')
+    const validation = ref(false)
+    watch(
+      () => post.bookPageRead,
+      (v: number) =>
+        (validation.value = pageRules(String(v), post.bookPage, pageValidation))
+    )
+    const stashedPageRead = ref(0)
+    const updatePage = () => {
+      isEditingPage.value = true
+      stashedPageRead.value = post.bookPageRead
+    }
     return {
       post,
       categoryColor,
@@ -283,6 +326,8 @@ export default defineComponent({
       toggleFavorite,
       isEditingPage,
       removeZero,
+      pageValidation,
+      updatePage
     }
   },
 })

@@ -182,8 +182,3 @@ export default defineComponent({
   },
 })
 </script>
-<style scoped>
-button:disabled {
-  background: #ccc;
-}
-</style>
