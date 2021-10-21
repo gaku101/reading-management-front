@@ -45,6 +45,10 @@ export default () => {
     } else if (!v.match(/^[a-zA-Z0-9]+$/)) {
       password.value = 'passwordは半角英数字で入力してください'
       return false
+    } else if (!v.match(/[0-9]/)) {
+      password.value =
+        'passwordは最低1文字以上の数字が含まれている必要があります'
+      return false
     } else if (!v.match(/[a-zA-Z]/)) {
       password.value =
         'passwordは最低1文字以上のアルファベットが含まれている必要があります'
@@ -53,10 +57,6 @@ export default () => {
       password.value = ''
       return true
     }
-    // else if (!v.match(/[0-9]/)) {
-    //   password.value =
-    //     'passwordは最低1文字以上の数字が含まれている必要があります'
-    //   return false}
   }
   const passwordConfirmRules = (
     v: string,
@@ -91,10 +91,55 @@ export default () => {
       return true
     }
   }
+  const pageRules = (v: string, bookPage: number, page: Ref<string>) => {
+    console.log('pageRules', v, page.value)
+    if (!v.match(/^[0-9]+$/)) {
+      page.value = 'pageは半角数字で入力してください'
+      return false
+    } else if (v.length > 4) {
+      page.value = 'pageは4桁以内で入力してください'
+      return false
+    } else if (parseInt(v) > bookPage) {
+      page.value = '読んだページ数は総ページ数以下の値で入力してください'
+      return false
+    } else {
+      page.value = ''
+      return true
+    }
+  }
+  const notePageRules = (v: string, page: Ref<string>) => {
+    console.log('notePageRules', v, page.value)
+    if (!v.match(/^[0-9]+$/)) {
+      page.value = 'pageは半角数字で入力してください'
+      return false
+    } else if (v.length > 4) {
+      page.value = 'pageは4桁以内で入力してください'
+      return false
+    } else {
+      page.value = ''
+      return true
+    }
+  }
+  const noteLineRules = (v: string, line: Ref<string>) => {
+    console.log('noteLineRules', v, line.value)
+    if (!v.match(/^[0-9]+$/)) {
+      line.value = 'lineは半角数字で入力してください'
+      return false
+    } else if (v.length > 4) {
+      line.value = 'lineは4桁以内で入力してください'
+      return false
+    } else {
+      line.value = ''
+      return true
+    }
+  }
   return {
     usernameRules,
     emailRules,
     passwordRules,
     passwordConfirmRules,
+    pageRules,
+    notePageRules,
+    noteLineRules,
   }
 }

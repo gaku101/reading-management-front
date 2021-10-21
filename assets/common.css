@@ -18,3 +18,6 @@ textarea {
 [type='search']::-webkit-search-decoration {
   -webkit-appearance: none;
 }
+button:disabled {
+  background: #ccc;
+}

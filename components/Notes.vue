@@ -73,18 +73,24 @@
             sm:w-auto sm:text-sm
             ml-auto
           "
+          :disabled="createValidation"
           @click="createNote"
         >
           Send
         </button>
       </div>
+      <span class="text-red-400 text-xs"
+        >{{ notePageValidation }}&nbsp;&nbsp;</span
+      >
+      <span class="text-red-400 text-xs">{{ noteLineValidation }}</span>
+
       <div v-for="note in notes" :key="note.id">
         <textarea
-          v-if="isEditing && note.id == selectedNote"
+          v-if="isEditing && note.id == selectedNote.id"
           rows="3"
           class="block w-full bg-gray mt-8 leading-9 text-lg"
           placeholder="Write body here..."
-          v-model="note.body"
+          v-model="selectedNote.body"
         ></textarea>
         <div
           v-else
@@ -92,9 +98,9 @@
           v-text="note.body"
         />
         <div class="place-items-center flex justify-between mt-2">
-          <div v-if="isEditing && note.id == selectedNote">
+          <div v-if="isEditing && note.id == selectedNote.id">
             <input
-              v-model="note.page"
+              v-model="selectedNote.page"
               class="
                 border-2 border-gray-300
                 bg-white
@@ -114,7 +120,7 @@
             />
             <span class="ml-1">ページ</span>
             <input
-              v-model="note.line"
+              v-model="selectedNote.line"
               class="
                 border-2 border-gray-300
                 bg-white
@@ -148,7 +154,10 @@
           </div>
           <div v-else />
 
-          <div v-if="isEditing && note.id == selectedNote" class="flex ml-auto">
+          <div
+            v-if="isEditing && note.id == selectedNote.id"
+            class="flex ml-auto"
+          >
             <button
               type="button"
               class="
@@ -198,7 +207,8 @@
                 focus:ring-red-500
                 sm:ml-3 sm:w-auto sm:text-sm
               "
-              @click="updateNote(note)"
+              :disabled="updateValidation"
+              @click="updateNote"
             >
               Update
             </button>
@@ -210,7 +220,7 @@
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              @click="openEditor(note.id)"
+              @click="openEditor(note)"
             >
               <path
                 stroke-linecap="round"
@@ -236,6 +246,14 @@
             </svg>
           </div>
         </div>
+        <div v-if="isEditing && note.id == selectedNote.id">
+          <span class="text-red-400 text-xs"
+            >{{ notePageUpdateValidation }}&nbsp;&nbsp;</span
+          >
+          <span class="text-red-400 text-xs">{{
+            noteLineUpdateValidation
+          }}</span>
+        </div>
       </div>
     </div>
     <ConfirmDialog
@@ -247,15 +265,22 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api'
+import {
+  computed,
+  defineComponent,
+  reactive,
+  ref,
+  watch,
+} from '@vue/composition-api'
 import { removeZero } from '@/utils/number'
+import useValidationRules from '@/utils/useValidation'
 
 export default defineComponent({
   name: 'Notes',
   setup(_, { root }) {
     const isEditing = ref(false)
-    const openEditor = (id: number) => {
-      selectedNote.value = id
+    const openEditor = (note: any) => {
+      Object.assign(selectedNote, note)
       isEditing.value = true
     }
     const cancelEditing = () => {
@@ -278,33 +303,39 @@ export default defineComponent({
     }
     listNotes()
     const isOpenedConfirm = ref(false)
-    const selectedNote = ref(0)
+    const selectedNote = reactive({ id: 0, body: '', page: '', line: '' })
+    const selectedNoteId = ref(0)
     const openConfirm = (id: number) => {
-      selectedNote.value = id
+      selectedNoteId.value = id
       isOpenedConfirm.value = true
     }
-    const note = ref('')
-    const updateNote = async (note: any) => {
+    const note = ref()
+    const updateNote = async () => {
       try {
         const { data } = await root.$axios.put('/api/notes', {
-          id: note.id,
-          body: note.body,
-          page: parseInt(note.page),
-          line: parseInt(note.line),
+          id: selectedNote.id,
+          body: selectedNote.body,
+          page: parseInt(selectedNote.page),
+          line: parseInt(selectedNote.line),
         })
         console.log('updateNote', data)
         isEditing.value = false
+        notes.value.forEach((note: any) => {
+          if (note.id === selectedNote.id) {
+            Object.assign(note, selectedNote)
+          }
+        })
       } catch (e) {
         console.error(e)
       }
     }
     const deleteNote = async () => {
       try {
-        await root.$axios.delete(`/api/notes/${selectedNote.value}`)
+        await root.$axios.delete(`/api/notes/${selectedNoteId.value}`)
         notes.value = notes.value.filter(
-          (note: any) => note.id !== selectedNote.value
+          (note: any) => note.id !== selectedNoteId.value
         )
-        selectedNote.value = 0
+        selectedNoteId.value = 0
         isOpenedConfirm.value = false
       } catch (e) {
         console.error(e)
@@ -317,16 +348,83 @@ export default defineComponent({
         const { data } = await root.$axios.post('/api/notes', {
           postId,
           body: note.value,
-          page: page.value,
-          line: page.value,
+          page: parseInt(page.value),
+          line: parseInt(page.value),
         })
         console.log('createComment', data)
         note.value = ''
+        page.value = ''
+        line.value = ''
         listNotes()
       } catch (e) {
         console.error(e)
       }
     }
+    const { notePageRules, noteLineRules } = useValidationRules()
+    const notePageValidation = ref('')
+    const noteLineValidation = ref('')
+    const notePageUpdateValidation = ref('')
+    const noteLineUpdateValidation = ref('')
+    const validation = ref(false)
+    watch(
+      () => page.value,
+      (v: number) => {
+        validation.value = notePageRules(String(v), notePageValidation)
+        if (!v) notePageValidation.value = ''
+      }
+    )
+    watch(
+      () => line.value,
+      (v: number) => {
+        validation.value = noteLineRules(String(v), noteLineValidation)
+        if (!v) noteLineValidation.value = ''
+      }
+    )
+    watch(
+      () => selectedNote.page,
+      (v: string) => {
+        validation.value = notePageRules(String(v), notePageUpdateValidation)
+        if (!v) notePageUpdateValidation.value = ''
+      }
+    )
+    watch(
+      () => selectedNote.line,
+      (v: string) => {
+        validation.value = noteLineRules(String(v), noteLineUpdateValidation)
+        if (!v) noteLineUpdateValidation.value = ''
+      }
+    )
+    const createValidation = computed(() => {
+      if (!note.value) {
+        console.log('some userInfo not set')
+        return true
+      } else if ((page.value || line.value) && !validation.value) {
+        console.log('passed validation')
+        return true
+      } else if (notePageValidation.value || notePageValidation.value) {
+        return true
+      } else if (!page.value && line.value) {
+        return true
+      } else {
+        return false
+      }
+    })
+    const updateValidation = computed(() => {
+      if (!selectedNote.body) {
+        console.log('some userInfo not set')
+        return true
+      } else if ((selectedNote.page || selectedNote.line) && !validation.value) {
+        console.log('passed validation')
+        return true
+      } else if (notePageUpdateValidation.value || noteLineUpdateValidation.value) {
+        return true
+      } else if (!selectedNote.page && selectedNote.line) {
+        return true
+      } else {
+        return false
+      }
+    })
+
     return {
       notes,
       isEditing,
@@ -342,6 +440,12 @@ export default defineComponent({
       page,
       line,
       removeZero,
+      notePageValidation,
+      noteLineValidation,
+      notePageUpdateValidation,
+      noteLineUpdateValidation,
+      createValidation,
+      updateValidation
     }
   },
 })
