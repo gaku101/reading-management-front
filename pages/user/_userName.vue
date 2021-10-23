@@ -37,8 +37,7 @@
           px-4
           rounded-2xl
           mt-3
-          hover:text-blue-400
-          hover:bg-transparent
+          hover:text-blue-400 hover:bg-transparent
           border border-blue-400
         "
         @click="unfollowUser"
@@ -48,9 +47,35 @@
         <span>{{ btnText }}</span>
       </button>
       <div class="col-span-3 mt-6 text-md text-blue-400">
-        Newbie&nbsp;&nbsp;|&nbsp;&nbsp;{{ points }} points
+        Newbie&nbsp;&nbsp;|&nbsp;&nbsp;{{ user.points }} points
       </div>
+      <button
+        class="flex col-span-3 text-blue-400 font-bold mt-4 hover:opacity-70"
+        @click="isOpenedDialog = true"
+      >
+        <span>Send Points</span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="ml-1 h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 11l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z"
+          />
+        </svg>
+      </button>
     </div>
+    <SendPointsDialog
+      :is-opened="isOpenedDialog"
+      :cancel-action="() => (isOpenedDialog = false)"
+      :to-user-id="user.id"
+      @send-points="user.points = $event"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -67,18 +92,11 @@ export default defineComponent({
       image: '',
     })
     const username = root.$route.params.userName
-    const points = ref(0)
-    const getAccount = async () => {
-      const { data } = await root.$axios.get(
-        `/api/accounts/by/${user.username}`
-      )
-      points.value = data.balance
-    }
+
     const getUser = async () => {
       try {
         const { data } = await root.$axios.get(`/api/users/${username}`)
         Object.assign(user, data)
-        getAccount()
         getFollow()
       } catch (e) {
         console.error(e)
@@ -116,13 +134,14 @@ export default defineComponent({
       }
     }
     const btnText = ref('following')
+    const isOpenedDialog = ref(false)
     return {
       user,
-      points,
       followUser,
       isFollow,
       unfollowUser,
       btnText,
+      isOpenedDialog,
     }
   },
 })

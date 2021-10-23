@@ -71,8 +71,8 @@
       >
         Edit Profile
       </button>
-      <div v-if="points !== null" class="col-span-3 mt-6 text-md text-blue-400">
-        Newbie&nbsp;&nbsp;|&nbsp;&nbsp;{{ points }} points
+      <div class="col-span-3 mt-6 text-md text-blue-400">
+        Newbie&nbsp;&nbsp;|&nbsp;&nbsp;{{ user.points }} points
       </div>
       <button
         class="
@@ -131,22 +131,10 @@ export default defineComponent({
   setup(_, { root }) {
     const user = computed(() => root.$store.getters['user/user'])
     const username = computed(() => root.$store.getters['user/username'])
-    const points = ref(0)
 
     const isOpenedEditProfile = ref(false)
-    const getAccount = async () => {
-      try {
-        const { data } = await root.$axios.get(
-          `/api/accounts/by/${username.value}`
-        )
-        console.log('getAccount', data)
-        points.value = data.balance
-      } catch (e) {
-        console.error(e)
-      }
-    }
+
     const isShowedEditAvatar = ref(false)
-    getAccount()
     const uploadfile = ref('')
     const editAvatar = async (e: any) => {
       console.log('editAvatar')
@@ -192,7 +180,6 @@ export default defineComponent({
     return {
       user,
       username,
-      points,
       isOpenedEditProfile,
       isShowedEditAvatar,
       editAvatar,
