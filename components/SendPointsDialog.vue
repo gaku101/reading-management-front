@@ -39,48 +39,47 @@
           shadow-xl
           transform
           transition-all
-          sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-5
+          sm:my-8 sm:align-middle sm:max-w-xs sm:w-full sm:p-4
         "
       >
         <div class="">
           <div class="sm:flex sm:items-start">
             <div class="text-center sm:text-left">
               <h3
-                class="text-lg leading-6 font-medium text-gray-900"
+                class="text-xl leading-6 font-medium text-gray-700"
                 id="modal-title"
               >
-                Edit Profile
+                Send Points
               </h3>
             </div>
           </div>
         </div>
-        <div class="mb-4">
-          <label
-            class="block text-gray-700 text-sm font-bold mb-2 mt-3"
-            for="profile"
-          >
-            Profile
-          </label>
+        <div class="mt-2">How many points do you send to this user?</div>
+        <div class="text-center">
           <input
+            v-model="points"
             class="
-              shadow
-              appearance-none
-              border
-              rounded
-              w-full
-              py-2
-              px-3
-              text-gray-700
-              leading-tight
-              focus:outline-none focus:shadow-outline
+              mt-2
+              border-2 border-gray-300
+              bg-white
+              h-10
+              pr-2
+              rounded-lg
+              text-sm
+              focus:outline-none
+              text-right
             "
-            id="profile"
+            size="5"
+            name="points"
             type="text"
-            placeholder="Profile"
-            v-model="userInfo.profile"
+            inputmode="numeric"
           />
+          <span>&nbsp;points</span>
+          <span>&nbsp;/&nbsp;</span>
+          <span class="text-gray-600">{{ user.points }}</span>
+          <span>&nbsp;points</span>
         </div>
-        <div class="py-3 sm:flex sm:flex-row-reverse">
+        <div class="mt-2 sm:flex sm:flex-row-reverse">
           <button
             type="button"
             class="
@@ -103,9 +102,9 @@
               focus:ring-red-500
               sm:ml-3 sm:w-auto sm:text-sm
             "
-            @click="updateUser"
+            @click="sendPoints"
           >
-            Update
+            Send
           </button>
           <button
             type="button"
@@ -132,7 +131,7 @@
             "
             @click="cancelAction"
           >
-            Close
+            Cancel
           </button>
         </div>
       </div>
@@ -141,7 +140,7 @@
 </template>
 <script lang="ts">
 // eslint-disable-next-line
-import { defineComponent, reactive, PropType } from '@vue/composition-api'
+import { defineComponent, PropType, computed, ref } from '@vue/composition-api'
 
 export default defineComponent({
   name: 'ProfileEditor',
@@ -154,39 +153,35 @@ export default defineComponent({
       type: Function as PropType<() => any>,
       default: () => {},
     },
-    user: {
-      type: Object as () => UserState,
+    toUserId: {
+      type: Number,
       required: true,
     },
   },
-  setup(props, { root }) {
-    const userInfo: UserState = reactive({
-      id: 0,
-      username: '',
-      password: '',
-      profile: '',
-      image: '',
-    })
-    Object.assign(userInfo, props.user)
-    const updateUser = async () => {
-      console.log('props.user', props.user)
-      console.log('userInfo', userInfo)
+  setup(props, { root, emit }) {
+    const user = computed(() => root.$store.getters['user/user'])
+    const points = ref(0)
+    const sendPoints = async () => {
+      if (typeof points.value === 'string') {
+        points.value = parseInt(points.value)
+      }
       try {
-        const { data } = await root.$axios.put('/api/users', {
-          id: props.user.id,
-          username: props.user.username,
-          profile: userInfo.profile,
+        const { data } = await root.$axios.post('/api/transfers', {
+          fromUserId: user.value.id,
+          toUserId: props.toUserId,
+          amount: points.value,
         })
-        console.log('data', data)
-        Object.assign(props.user, userInfo)
+        console.log('sendPoints', data)
+        emit('send-points', data.to_user.points)
         props.cancelAction()
       } catch (e) {
         console.error(e)
       }
     }
     return {
-      userInfo,
-      updateUser,
+      sendPoints,
+      user,
+      points,
     }
   },
 })

@@ -1,6 +1,6 @@
 <template>
-  <div class="grid grid-cols-12 h-screen">
-    <div class="col-start-3 col-span-8 mt-20">
+  <div class="grid grid-cols-12 h-full">
+    <div class="col-start-2 col-span-10 mt-20">
       <div class="text-3xl text-gray-600 mb-10">{{ keyword }}の検索結果</div>
       <div class="shadow-md rounded bg-white">
         <div
@@ -13,7 +13,7 @@
             <img
               :src="book.image ? book.image : '../../assets/no-image.png'"
               alt="bookImage"
-              class="h-32"
+              class="h-32 md:h-28"
             />
           </div>
           <div class="col-span-11 p-2 pl-4">
