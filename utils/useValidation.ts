@@ -1,4 +1,5 @@
 import { Ref } from '@vue/composition-api'
+import { parse } from 'postcss'
 
 export default () => {
   const usernameRules = (v: string, username: Ref<string>) => {
@@ -133,6 +134,20 @@ export default () => {
       return true
     }
   }
+  const pointRules = (v: string, ownPoints: number, point: Ref<string>) => {
+    console.log('pointRules', v, ownPoints, point.value)
+    if (!v.match(/^[0-9]+$/)) {
+      point.value = 'pointは半角数字で入力してください'
+    } else if (v.length > 4) {
+      point.value = 'pointは4桁以内で入力してください'
+    } else if (parseInt(v) <= 0) {
+      point.value = 'ポイントは1以上の値で入力してください'
+    } else if (parseInt(v) > ownPoints) {
+      point.value = '入力したポイントが所持ポイントを超えています'
+    } else {
+      point.value = ''
+    }
+  }
   return {
     usernameRules,
     emailRules,
@@ -141,5 +156,6 @@ export default () => {
     pageRules,
     notePageRules,
     noteLineRules,
+    pointRules,
   }
 }

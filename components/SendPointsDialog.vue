@@ -73,12 +73,14 @@
             name="points"
             type="text"
             inputmode="numeric"
+            @click="removeZero"
           />
           <span>&nbsp;points</span>
           <span>&nbsp;/&nbsp;</span>
           <span class="text-gray-600">{{ user.points }}</span>
           <span>&nbsp;points</span>
         </div>
+        <span class="text-red-400 text-xs">{{ pointValidation }}</span>
         <div class="mt-2 sm:flex sm:flex-row-reverse">
           <button
             type="button"
@@ -102,6 +104,7 @@
               focus:ring-red-500
               sm:ml-3 sm:w-auto sm:text-sm
             "
+            :disabled="validate"
             @click="sendPoints"
           >
             Send
@@ -140,7 +143,15 @@
 </template>
 <script lang="ts">
 // eslint-disable-next-line
-import { defineComponent, PropType, computed, ref } from '@vue/composition-api'
+import {
+  defineComponent,
+  PropType,
+  computed,
+  ref,
+  watch,
+} from '@vue/composition-api'
+import useValidationRules from '@/utils/useValidation'
+import { removeZero } from '~/utils/useNumber'
 
 export default defineComponent({
   name: 'ProfileEditor',
@@ -178,10 +189,38 @@ export default defineComponent({
         console.error(e)
       }
     }
+
+    const { pointRules } = useValidationRules()
+    const pointValidation = ref('')
+    watch(
+      () => points.value,
+      (v: number) => {
+        pointRules(
+          String(v),
+          user.value.points,
+          pointValidation
+        )
+        if (!v) pointValidation.value = ''
+      }
+    )
+    const validate = computed(() => {
+      if (!points.value) {
+        console.log('points not set')
+        return true
+      } else if (pointValidation.value) {
+        console.log('points not set')
+        return true
+      } else {
+        return false
+      }
+    })
     return {
       sendPoints,
       user,
       points,
+      pointValidation,
+      validate,
+      removeZero
     }
   },
 })

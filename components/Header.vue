@@ -14,7 +14,7 @@
             class="inline-block hover:text-red-200 mr-4"
             to="/posts"
             id="menu-item-0"
-            >Posts</NuxtLink
+            >My Posts</NuxtLink
           >
           <NuxtLink
             class="inline-block hover:text-red-200 mr-4"

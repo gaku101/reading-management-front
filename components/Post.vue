@@ -172,8 +172,8 @@ import {
   ref,
   watch,
 } from '@vue/composition-api'
-import { categoryColor } from '@/utils/categoryColor'
-import { removeZero } from '@/utils/number'
+import { categoryColor } from '~/utils/useCategoryColor'
+import { removeZero } from '~/utils/useNumber'
 import useValidationRules from '@/utils/useValidation'
 
 export default defineComponent({
