@@ -9,6 +9,7 @@ declare interface UserState {
 declare interface Post {
   id: number
   author: string
+  authorImage: string
   title: string
   created_at: any
   category: {
@@ -19,4 +20,6 @@ declare interface Post {
   bookImage: string
   bookPage: number
   bookPageRead: number
+  favorites: number
+  commentsNum: number
 }

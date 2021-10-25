@@ -1,5 +1,4 @@
 import { Ref } from '@vue/composition-api'
-import { parse } from 'postcss'
 
 export default () => {
   const usernameRules = (v: string, username: Ref<string>) => {

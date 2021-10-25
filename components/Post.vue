@@ -190,6 +190,7 @@ export default defineComponent({
     const post: Post = reactive({
       id: 0,
       author: '',
+      authorImage: '',
       title: '',
       created_at: '',
       category: {
@@ -200,6 +201,8 @@ export default defineComponent({
       bookImage: '',
       bookPage: 0,
       bookPageRead: 0,
+      favorites:0,
+      commentsNum: 0
     })
     const getPost = async () => {
       try {
