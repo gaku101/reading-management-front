@@ -272,7 +272,7 @@ import {
   ref,
   watch,
 } from '@vue/composition-api'
-import { removeZero } from '@/utils/number'
+import { removeZero } from '~/utils/useNumber'
 import useValidationRules from '@/utils/useValidation'
 
 export default defineComponent({

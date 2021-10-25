@@ -39,7 +39,7 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent, ref } from '@vue/composition-api'
-import { omitString } from '@/utils/string'
+import { omitString } from '~/utils/useString'
 
 export default defineComponent({
   name: 'Search',

@@ -40,7 +40,7 @@
           <NuxtLink
             :to="`/user/${post.author}`"
             class="hover:opacity-50 flex place-items-center"
-            v-if="!isRoot"
+            v-if="isRoot"
           >
             <span class="mr-2">{{ post.author }}</span>
             <ProfileImage class="w-7 h-7" :url="post.authorImage" />
@@ -95,7 +95,7 @@
             <span class="ml-2">{{ post.commentsNum }}</span>
           </div>
           <div class="text-sm text-gray-600 ml-auto">
-            {{ $dayjs(post.created_at).format('YYYY/MM/DD HH:mm') }}
+            {{ $dayjs(post.created_at).format('YYYY/MM/DD') }}
           </div>
         </div>
       </NuxtLink>
@@ -105,7 +105,7 @@
       
 <script lang="ts">
 import { computed, defineComponent, ref, watch } from '@vue/composition-api'
-import { categoryColor } from '@/utils/categoryColor'
+import { categoryColor } from '~/utils/useCategoryColor'
 
 export default defineComponent({
   name: 'PostCards',
@@ -149,10 +149,10 @@ export default defineComponent({
     const isRoot = ref(path.value === '/')
     switch (path.value) {
       case '/':
-        listMyPosts()
+        listPosts()
         break
       case '/posts':
-        listPosts()
+        listMyPosts()
         break
       case '/favorites':
         listFavorites()
