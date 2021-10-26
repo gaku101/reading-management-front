@@ -136,23 +136,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, watch } from '@vue/composition-api'
+import { defineComponent, computed, ref, watch, useContext, useRouter } from '@nuxtjs/composition-api'
 
 export default defineComponent({
   name: 'Header',
-  setup(_, { root }) {
-    const user = computed(() => root.$store.getters['user/user'])
-    const username = computed(() => root.$store.getters['user/username'])
+  setup() {
+    const { store, route } = useContext()
+    const router = useRouter()
+    const user = computed(() => store.getters['user/user'])
+    const username = computed(() => store.getters['user/username'])
     const dropDown = ref(false)
     watch(
-      () => root.$route,
+      () => route.value,
       () => {
+        console.debug('route', route.value)
         dropDown.value = false
       }
     )
     const keyword = ref('')
     const search = () => {
-      root.$router.push({
+      router.push({
         path: `/search/${keyword.value}`,
       })
     }

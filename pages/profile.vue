@@ -122,15 +122,23 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from '@vue/composition-api'
+import {
+  defineComponent,
+  computed,
+  ref,
+  useContext,
+  useRouter,
+} from '@nuxtjs/composition-api'
 import ProfileImage from '~/components/ProfileImage.vue'
 
 export default defineComponent({
   components: { ProfileImage },
   name: 'Profile',
-  setup(_, { root }) {
-    const user = computed(() => root.$store.getters['user/user'])
-    const username = computed(() => root.$store.getters['user/username'])
+  setup() {
+    const { store, $axios } = useContext()
+    const router = useRouter()
+    const user = computed(() => store.getters['user/user'])
+    const username = computed(() => store.getters['user/username'])
 
     const isOpenedEditProfile = ref(false)
 
@@ -150,7 +158,7 @@ export default defineComponent({
       console.log('params', params)
       // API実行
       try {
-        const { data } = await root.$axios.post(
+        const { data } = await $axios.post(
           `/api/images/${user.value.username}`,
           params,
           {
@@ -169,8 +177,8 @@ export default defineComponent({
     const isOpenedConfirm = ref(false)
     const deleteUser = async () => {
       try {
-        await root.$axios.delete(`/api/users/${user.value.username}`)
-        root.$router.push({
+        await $axios.delete(`/api/users/${user.value.username}`)
+        router.push({
           path: '/sign-up',
         })
       } catch (e) {

@@ -270,14 +270,17 @@ import {
   defineComponent,
   reactive,
   ref,
+  useContext,
   watch,
-} from '@vue/composition-api'
+} from '@nuxtjs/composition-api'
 import { removeZero } from '~/utils/useNumber'
 import useValidationRules from '@/utils/useValidation'
 
+
 export default defineComponent({
   name: 'Notes',
-  setup(_, { root }) {
+  setup() {
+    const { params, $axios } = useContext()
     const isEditing = ref(false)
     const openEditor = (note: any) => {
       Object.assign(selectedNote, note)
@@ -287,12 +290,12 @@ export default defineComponent({
       isEditing.value = false
     }
     const notes = ref()
-    const postId = parseInt(root.$route.params.postId)
+    const postId = parseInt(params.value.postId)
     const pageId = 1
     const pageSize = 30
     const listNotes = async () => {
       try {
-        const { data } = await root.$axios.get(
+        const { data } = await $axios.get(
           `/api/notes/${postId}?page_id=${pageId}&page_size=${pageSize}`
         )
         console.log('listNotes', data)
@@ -312,7 +315,7 @@ export default defineComponent({
     const note = ref()
     const updateNote = async () => {
       try {
-        const { data } = await root.$axios.put('/api/notes', {
+        const { data } = await $axios.put('/api/notes', {
           id: selectedNote.id,
           body: selectedNote.body,
           page: parseInt(selectedNote.page),
@@ -331,7 +334,7 @@ export default defineComponent({
     }
     const deleteNote = async () => {
       try {
-        await root.$axios.delete(`/api/notes/${selectedNoteId.value}`)
+        await $axios.delete(`/api/notes/${selectedNoteId.value}`)
         notes.value = notes.value.filter(
           (note: any) => note.id !== selectedNoteId.value
         )
@@ -345,7 +348,7 @@ export default defineComponent({
     const line = ref()
     const createNote = async () => {
       try {
-        const { data } = await root.$axios.post('/api/notes', {
+        const { data } = await $axios.post('/api/notes', {
           postId,
           body: note.value,
           page: parseInt(page.value),

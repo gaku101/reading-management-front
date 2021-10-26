@@ -38,15 +38,23 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref } from '@vue/composition-api'
+import {
+  computed,
+  defineComponent,
+  ref,
+  useContext,
+  useRouter,
+} from '@nuxtjs/composition-api'
 import { omitString } from '~/utils/useString'
 
 export default defineComponent({
   name: 'Search',
-  setup(_, { root }) {
-    const user = computed(() => root.$store.getters['user/user'])
+  setup() {
+    const { store, params, $axios } = useContext()
+    const router = useRouter()
+    const user = computed(() => store.getters['user/user'])
     const books = ref()
-    const keyword = root.$route.params.keyword
+    const keyword = params.value.keyword
     const search = async () => {
       await fetch(
         'https://www.googleapis.com/books/v1/volumes?q=' +
@@ -88,7 +96,7 @@ export default defineComponent({
     }
     const createPost = async () => {
       try {
-        const { data } = await root.$axios.post('/api/posts', {
+        const { data } = await $axios.post('/api/posts', {
           author: user.value.username,
           title: selectedBook.value.title,
           bookAuthor: selectedBook.value.author,
@@ -97,7 +105,7 @@ export default defineComponent({
           categoryId: 0,
         })
         console.debug('createPost', data)
-        root.$router.push({
+        router.push({
           path: `/${data.id}`,
         })
         isOpenedConfirm.value = false

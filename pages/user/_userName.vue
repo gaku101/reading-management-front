@@ -79,11 +79,18 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, ref } from '@vue/composition-api'
+import {
+  defineComponent,
+  reactive,
+  ref,
+  useContext,
+} from '@nuxtjs/composition-api'
 
 export default defineComponent({
   name: '',
-  setup(_, { root }) {
+  setup() {
+    const { params, $axios } = useContext()
+
     const user: UserState = reactive({
       id: 0,
       username: '',
@@ -91,11 +98,11 @@ export default defineComponent({
       profile: '',
       image: '',
     })
-    const username = root.$route.params.userName
+    const username = params.value.userName
 
     const getUser = async () => {
       try {
-        const { data } = await root.$axios.get(`/api/users/${username}`)
+        const { data } = await $axios.get(`/api/users/${username}`)
         Object.assign(user, data)
         getFollow()
       } catch (e) {
@@ -106,7 +113,7 @@ export default defineComponent({
     const isFollow = ref(false)
     const followUser = async () => {
       try {
-        const { data } = await root.$axios.post('/api/follow', {
+        const { data } = await $axios.post('/api/follow', {
           followingId: user.id,
         })
         console.log('followUser', data)
@@ -117,7 +124,7 @@ export default defineComponent({
     }
     const getFollow = async () => {
       try {
-        const { data } = await root.$axios.get(`/api/follow/${user.id}`)
+        const { data } = await $axios.get(`/api/follow/${user.id}`)
         console.log('getFollow', data)
         if (data) isFollow.value = true
       } catch (e) {
@@ -126,7 +133,7 @@ export default defineComponent({
     }
     const unfollowUser = async () => {
       try {
-        const data = await root.$axios.delete(`/api/follow/${user.id}`)
+        const data = await $axios.delete(`/api/follow/${user.id}`)
         console.log('unfollowUser', data)
         isFollow.value = false
       } catch (e) {

@@ -82,20 +82,22 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref } from '@vue/composition-api'
+import { computed, defineComponent, ref, useContext } from '@nuxtjs/composition-api'
+
 
 export default defineComponent({
   name: 'Comments',
-  setup(_, { root }) {
-    const user = computed(() => root.$store.getters['user/user'])
+  setup() {
+    const { store, params, $axios } = useContext()
+    const user = computed(() => store.getters['user/user'])
     const comment = ref('')
-    const postId = parseInt(root.$route.params.postId)
+    const postId = parseInt(params.value.postId)
     const pageId = 1
     const pageSize = 30
     const comments = ref()
     const listComments = async () => {
       try {
-        const { data } = await root.$axios.get(
+        const { data } = await $axios.get(
           `/api/comments/${postId}?page_id=${pageId}&page_size=${pageSize}`
         )
         console.log('listComments', data)
@@ -107,7 +109,7 @@ export default defineComponent({
     listComments()
     const createComment = async () => {
       try {
-        const { data } = await root.$axios.post('/api/comments', {
+        const { data } = await $axios.post('/api/comments', {
           postId,
           body: comment.value,
         })
@@ -120,7 +122,7 @@ export default defineComponent({
     }
     const isPostAuthor = ref(false)
     const getPost = async () => {
-      const { data } = await root.$axios.get(`/api/posts/${postId}`)
+      const { data } = await $axios.get(`/api/posts/${postId}`)
       console.log('getPost', data)
       isPostAuthor.value = user.value.username === data.author
       console.log('isPostAuthor', isPostAuthor.value)
@@ -134,7 +136,7 @@ export default defineComponent({
     }
     const deleteComment = async () => {
       try {
-        const data = await root.$axios.delete(
+        const data = await $axios.delete(
           `/api/comments/${selectedComment.value}`
         )
         console.log('deletePost', data)

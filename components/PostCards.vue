@@ -104,7 +104,7 @@
 </template>
       
 <script lang="ts">
-import { computed, defineComponent, ref, watch } from '@vue/composition-api'
+import { computed, defineComponent, ref, useContext, watch } from '@nuxtjs/composition-api'
 import { categoryColor } from '~/utils/useCategoryColor'
 
 export default defineComponent({
@@ -116,12 +116,13 @@ export default defineComponent({
     },
   },
   setup(props, { root, emit }) {
-    const user = computed(() => root.$store.getters['user/user'])
+    const { store, $axios } = useContext()
+    const user = computed(() => store.getters['user/user'])
     const pageId = 1
     const pageSize = 30
     const posts = ref<Post[]>()
     const listMyPosts = async () => {
-      const { data } = await root.$axios.get(
+      const { data } = await $axios.get(
         `/api/posts?page_id=${pageId}&page_size=${pageSize}`
       )
       data.sort(
@@ -132,14 +133,14 @@ export default defineComponent({
       console.log('posts', posts.value)
     }
     const listPosts = async () => {
-      const { data } = await root.$axios.get(
+      const { data } = await $axios.get(
         `/api/posts/list?page_id=${pageId}&page_size=${pageSize}`
       )
       posts.value = data
       console.log('posts', posts.value)
     }
     const listFavorites = async () => {
-      const { data } = await root.$axios.get(
+      const { data } = await $axios.get(
         `/api/post-favorite/list/${user.value.id}?page_id=${pageId}&page_size=${pageSize}`
       )
       posts.value = data

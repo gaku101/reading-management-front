@@ -19,17 +19,18 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api'
+import { defineComponent, ref, useContext } from '@nuxtjs/composition-api'
 
 export default defineComponent({
   name: 'Following',
-  setup(_, { root }) {
+  setup() {
+    const { $axios } = useContext()
     const pageId = 1
     const pageSize = 30
     const users = ref<UserState[]>()
     const listFollowingUsers = async () => {
       try {
-        const { data } = await root.$axios.get(
+        const { data } = await $axios.get(
           `/api/follow?page_id=${pageId}&page_size=${pageSize}`
         )
         users.value = data

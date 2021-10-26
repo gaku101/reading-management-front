@@ -43,7 +43,7 @@
 
 <script lang="ts">
 // eslint-disable-next-line
-import { defineComponent, PropType } from '@vue/composition-api'
+import { defineComponent, PropType } from '@nuxtjs/composition-api'
 
 export default defineComponent({
   name: 'ConfirmDialog',

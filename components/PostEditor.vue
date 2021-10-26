@@ -35,11 +35,8 @@
           font-medium
           text-white
           hover:bg-blue-600
-          focus:outline-none
-          focus:ring-2 focus:ring-offset-2 focus:ring-red-500
-          sm:ml-3
-          sm:w-auto
-          sm:text-sm
+          focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500
+          sm:ml-3 sm:w-auto sm:text-sm
         "
         @click="createPost"
       >
@@ -63,11 +60,10 @@
           text-gray-700
           hover:bg-gray-50
           focus:outline-none
-          focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
-          sm:mt-0
-          sm:ml-3
-          sm:w-auto
-          sm:text-sm
+          focus:ring-2
+          focus:ring-offset-2
+          focus:ring-indigo-500
+          sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm
         "
         @click="cancelAction"
       >
@@ -77,7 +73,12 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref, computed } from '@vue/composition-api'
+import {
+  defineComponent,
+  ref,
+  computed,
+  useContext,
+} from '@nuxtjs/composition-api'
 
 export default defineComponent({
   name: 'PostEditor',
@@ -95,14 +96,15 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(_, { root, emit }) {
-    const username = computed(() => root.$store.getters['user/username'])
+  setup(_, { emit }) {
+    const { store, $axios } = useContext()
+    const username = computed(() => store.getters['user/username'])
     const selectedCategory = ref(0)
     const title = ref('')
     const body = ref('')
     const createPost = async () => {
       try {
-        await root.$axios.post('/api/posts', {
+        await $axios.post('/api/posts', {
           author: username.value,
           title: title.value,
           body: body.value,
