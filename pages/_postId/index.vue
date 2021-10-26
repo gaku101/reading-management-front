@@ -6,13 +6,14 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref } from '@vue/composition-api'
+import { computed, defineComponent, ref, useContext } from '@nuxtjs/composition-api'
 
 export default defineComponent({
   name: 'PostId',
-  setup(_, { root }) {
+  setup() {
+    const { store } = useContext()
     const author = ref('')
-    const user = computed(() => root.$store.getters['user/user'])
+    const user = computed(() => store.getters['user/user'])
     const isLoginedUser = computed(() => {
       console.debug('author', author.value)
       return user.value.username === author.value

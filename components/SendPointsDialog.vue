@@ -63,7 +63,8 @@ import {
   computed,
   ref,
   watch,
-} from '@vue/composition-api'
+  useContext,
+} from '@nuxtjs/composition-api'
 import useValidationRules from '@/utils/useValidation'
 import { removeZero } from '~/utils/useNumber'
 
@@ -84,14 +85,15 @@ export default defineComponent({
     },
   },
   setup(props, { root, emit }) {
-    const user = computed(() => root.$store.getters['user/user'])
+    const {store, $axios} = useContext()
+    const user = computed(() => store.getters['user/user'])
     const points = ref(0)
     const sendPoints = async () => {
       if (typeof points.value === 'string') {
         points.value = parseInt(points.value)
       }
       try {
-        const { data } = await root.$axios.post('/api/transfers', {
+        const { data } = await $axios.post('/api/transfers', {
           fromUserId: user.value.id,
           toUserId: props.toUserId,
           amount: points.value,

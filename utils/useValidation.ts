@@ -1,4 +1,4 @@
-import { Ref } from '@vue/composition-api'
+import { Ref } from '@nuxtjs/composition-api'
 
 export default () => {
   const usernameRules = (v: string, username: Ref<string>) => {

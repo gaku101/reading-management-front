@@ -141,7 +141,12 @@
 </template>
 <script lang="ts">
 // eslint-disable-next-line
-import { defineComponent, reactive, PropType } from '@vue/composition-api'
+import {
+  defineComponent,
+  reactive,
+  PropType,
+  useContext,
+} from '@nuxtjs/composition-api'
 
 export default defineComponent({
   name: 'ProfileEditor',
@@ -159,7 +164,8 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props, { root }) {
+  setup(props) {
+    const { $axios } = useContext()
     const userInfo: UserState = reactive({
       id: 0,
       username: '',
@@ -172,7 +178,7 @@ export default defineComponent({
       console.log('props.user', props.user)
       console.log('userInfo', userInfo)
       try {
-        const { data } = await root.$axios.put('/api/users', {
+        const { data } = await $axios.put('/api/users', {
           id: props.user.id,
           username: props.user.username,
           profile: userInfo.profile,

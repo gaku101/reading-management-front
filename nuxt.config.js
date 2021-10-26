@@ -18,7 +18,7 @@ export default {
   css: ['@/assets/common.css'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['@/plugins/composition-api', '@/plugins/axios', '@plugins/dayjs'],
+  plugins: ['@/plugins/axios', '@plugins/dayjs'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -30,6 +30,7 @@ export default {
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/tailwindcss',
     'nuxt-vite',
+    '@nuxtjs/composition-api/module'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules

@@ -21,8 +21,7 @@
               px-3
               text-gray-700
               leading-tight
-              focus:outline-none
-              focus:shadow-outline
+              focus:outline-none focus:shadow-outline
             "
             id="username"
             type="text"
@@ -47,8 +46,7 @@
               px-3
               text-gray-700
               leading-tight
-              focus:outline-none
-              focus:shadow-outline
+              focus:outline-none focus:shadow-outline
             "
             id="email"
             type="text"
@@ -76,8 +74,7 @@
               px-3
               text-gray-700
               leading-tight
-              focus:outline-none
-              focus:shadow-outline
+              focus:outline-none focus:shadow-outline
             "
             id="password"
             type="password"
@@ -105,8 +102,7 @@
               px-3
               text-gray-700
               leading-tight
-              focus:outline-none
-              focus:shadow-outline
+              focus:outline-none focus:shadow-outline
             "
             id="confirmPassword"
             type="password"
@@ -139,8 +135,7 @@
               px-4
               mt-2
               rounded
-              focus:outline-none
-              focus:shadow-outline
+              focus:outline-none focus:shadow-outline
             "
             type="button"
             :disabled="validate"
@@ -160,7 +155,9 @@ import {
   ref,
   watch,
   computed,
-} from '@vue/composition-api'
+  useContext,
+  useRouter,
+} from '@nuxtjs/composition-api'
 import useValidationRules from '@/utils/useValidation'
 interface UserInfo {
   username: string
@@ -169,10 +166,13 @@ interface UserInfo {
   passwordConfirm: string
 }
 
+
 export default defineComponent({
   name: 'SignUp',
   layout: 'no-header',
-  setup(_, { root }) {
+  setup() {
+    const { store, $axios } = useContext()
+    const router = useRouter()
     const { usernameRules, passwordRules, passwordConfirmRules, emailRules } =
       useValidationRules()
     const userInfo: UserInfo = reactive({
@@ -232,15 +232,15 @@ export default defineComponent({
     })
     const signIn = async () => {
       try {
-        const { data } = await root.$axios.post('/api/users/login', {
+        const { data } = await $axios.post('/api/users/login', {
           username: userInfo.username,
           password: userInfo.password,
         })
         if (data.access_token) {
-          await root.$store.dispatch('user/setUser', data.user)
+          await store.dispatch('user/setUser', data.user)
           localStorage.setItem('token', data.access_token)
           localStorage.setItem('username', data.user.username)
-          root.$router.push('/')
+          router.push('/')
         }
       } catch (e) {
         console.error(e)
@@ -257,7 +257,7 @@ export default defineComponent({
         passwordConfirmValidation
       )
       try {
-        const { data } = await root.$axios.post('/api/users', {
+        const { data } = await $axios.post('/api/users', {
           username: userInfo.username,
           email: userInfo.email,
           password: userInfo.password,
@@ -267,7 +267,7 @@ export default defineComponent({
         })
         console.log('signUp', data)
         signIn()
-      } catch (e:any) {
+      } catch (e: any) {
         const { data } = e.response
         console.error(data)
         if (

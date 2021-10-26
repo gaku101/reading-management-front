@@ -170,17 +170,20 @@ import {
   defineComponent,
   reactive,
   ref,
+  useContext,
   watch,
-} from '@vue/composition-api'
+} from '@nuxtjs/composition-api'
 import { categoryColor } from '~/utils/useCategoryColor'
 import { removeZero } from '~/utils/useNumber'
 import useValidationRules from '@/utils/useValidation'
 
+
 export default defineComponent({
   name: 'Post',
   setup(_, { root, emit }) {
-    const username = computed(() => root.$store.getters['user/username'])
-    const user = computed(() => root.$store.getters['user/user'])
+    const { store, $axios } = useContext()
+    const username = computed(() => store.getters['user/username'])
+    const user = computed(() => store.getters['user/user'])
     const selectedCategory = ref(0)
     watch(selectedCategory, () => {
       console.debug('selectedCategory', selectedCategory.value)
@@ -206,7 +209,7 @@ export default defineComponent({
     })
     const getPost = async () => {
       try {
-        const { data } = await root.$axios.get(`/api/posts/${postId}`)
+        const { data } = await $axios.get(`/api/posts/${postId}`)
         console.log('getPost', data)
         Object.assign(post, data)
         selectedCategory.value = data.category.id
@@ -234,7 +237,7 @@ export default defineComponent({
         if (typeof post?.bookPageRead === 'string') {
           post.bookPageRead = parseInt(post?.bookPageRead)
         }
-        const { data } = await root.$axios.put('/api/posts', {
+        const { data } = await $axios.put('/api/posts', {
           id: postId,
           author: username.value,
           BookPageRead: post?.bookPageRead || 0,
@@ -254,7 +257,7 @@ export default defineComponent({
     const isFavorite = ref(false)
     const getFavorite = async () => {
       try {
-        const { data } = await root.$axios.get(`/api/post-favorite/${postId}`)
+        const { data } = await $axios.get(`/api/post-favorite/${postId}`)
         console.log('getFavorite', data)
         if (!!data && data.user_id === user.value.id) isFavorite.value = true
       } catch (e) {
@@ -267,7 +270,7 @@ export default defineComponent({
     }
     const addFavorite = async () => {
       try {
-        const { data } = await root.$axios.post('/api/post-favorite', {
+        const { data } = await $axios.post('/api/post-favorite', {
           postId,
           userId: user.value.id,
         })
@@ -279,7 +282,7 @@ export default defineComponent({
     }
     const deleteFavorite = async () => {
       try {
-        await root.$axios.delete(`/api/post-favorite/${postId}`)
+        await $axios.delete(`/api/post-favorite/${postId}`)
         isFavorite.value = false
       } catch (e) {
         console.error(e)
@@ -291,7 +294,7 @@ export default defineComponent({
     }
     const deletePost = async () => {
       try {
-        const { data } = await root.$axios.delete(`/api/posts/${postId}`)
+        const { data } = await $axios.delete(`/api/posts/${postId}`)
         console.log('deletePost', data)
         root.$router.push('/')
       } catch (e) {

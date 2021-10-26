@@ -1,3 +1,5 @@
+import { defineNuxtPlugin } from '@nuxtjs/composition-api'
+
 import dayjs from 'dayjs'
 import 'dayjs/locale/ja'
 import utc from 'dayjs/plugin/utc'
@@ -24,11 +26,11 @@ declare module 'vuex/types/index' {
   }
 }
 
-export default (_: any, inject: any) => {
+export default defineNuxtPlugin((_: any, inject: any) => {
   inject(
     'dayjs',
     (date?: string | number | dayjs.Dayjs | Date | undefined): dayjs.Dayjs => {
       return dayjs(date)
     }
   )
-}
+})

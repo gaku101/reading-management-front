@@ -18,7 +18,12 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, ref } from '@vue/composition-api'
+import {
+  defineComponent,
+  onMounted,
+  ref,
+  useContext,
+} from '@nuxtjs/composition-api'
 
 export default defineComponent({
   name: 'CategorySelect',
@@ -28,10 +33,11 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props, { root, emit }) {
+  setup(props, { emit }) {
+    const { $axios } = useContext()
     const categories = ref()
     const listCategories = async () => {
-      const { data } = await root.$axios.get(`/api/category`)
+      const { data } = await $axios.get(`/api/category`)
       categories.value = data
     }
     listCategories()
@@ -53,7 +59,7 @@ export default defineComponent({
     return {
       categories,
       updateValue,
-      selected
+      selected,
     }
   },
 })

@@ -101,7 +101,9 @@ import {
   reactive,
   ref,
   watch,
-} from '@vue/composition-api'
+  useContext,
+  useRouter,
+} from '@nuxtjs/composition-api'
 import useValidationRules from '@/utils/useValidation'
 
 interface UserInfo {
@@ -112,7 +114,9 @@ interface UserInfo {
 export default defineComponent({
   name: 'SignIn',
   layout: 'no-header',
-  setup(_, { root }) {
+  setup(_) {
+    const { store, $axios } = useContext()
+    const router = useRouter()
     const { usernameRules, passwordRules } = useValidationRules()
     const userInfo: UserInfo = reactive({
       username: '',
@@ -125,16 +129,16 @@ export default defineComponent({
     const signIn = async () => {
       console.log('userInfo', userInfo.username, userInfo.password)
       try {
-        const { data } = await root.$axios.post('/api/users/login', {
+        const { data } = await $axios.post('/api/users/login', {
           username: userInfo.username,
           password: userInfo.password,
         })
         console.log('res', data)
         if (data.access_token) {
-          await root.$store.dispatch('user/setUser', data.user)
+          await store.dispatch('user/setUser', data.user)
           localStorage.setItem('token', data.access_token)
           localStorage.setItem('username', data.user.username)
-          root.$router.push('/')
+          router.push('/')
         }
       } catch (e: any) {
         const { data } = e.response
