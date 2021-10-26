@@ -84,7 +84,7 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props, { root, emit }) {
+  setup(props, { emit }) {
     const {store, $axios} = useContext()
     const user = computed(() => store.getters['user/user'])
     const points = ref(0)

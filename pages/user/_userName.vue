@@ -84,7 +84,6 @@ import {
   reactive,
   ref,
   useContext,
-  useRouter,
 } from '@nuxtjs/composition-api'
 
 export default defineComponent({

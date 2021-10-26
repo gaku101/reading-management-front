@@ -96,7 +96,7 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(_, { root, emit }) {
+  setup(_, { emit }) {
     const { store, $axios } = useContext()
     const username = computed(() => store.getters['user/username'])
     const selectedCategory = ref(0)
