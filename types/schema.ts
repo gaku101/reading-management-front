@@ -6,6 +6,11 @@ declare interface UserState {
   image: string
 }
 
+declare interface EntryState {
+  id: number
+  amount: number
+}
+
 declare interface Post {
   id: number
   author: string
