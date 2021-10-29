@@ -114,7 +114,7 @@ interface UserInfo {
 export default defineComponent({
   name: 'SignIn',
   layout: 'no-header',
-  setup(_) {
+  setup() {
     const { store, $axios } = useContext()
     const router = useRouter()
     const { usernameRules, passwordRules } = useValidationRules()
@@ -139,6 +139,9 @@ export default defineComponent({
           localStorage.setItem('token', data.access_token)
           localStorage.setItem('username', data.user.username)
           router.push('/')
+        }
+        if (data.entry.amount) {
+          await store.dispatch('entry/setEntry', data.entry)
         }
       } catch (e: any) {
         const { data } = e.response
