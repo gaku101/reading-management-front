@@ -3,7 +3,7 @@
     <div
       v-for="post in posts"
       :key="post.id"
-      class="w-full sm:w-1/2 md:w-1/4 xl:w-1/4 mx-4"
+      class="w-full sm:w-1/2 md:w-1/4 xl:w-1/4 px-4"
     >
       <NuxtLink
         :to="`/${post.id}`"
@@ -40,7 +40,7 @@
           <NuxtLink
             :to="`/user/${post.author}`"
             class="hover:opacity-50 flex place-items-center"
-            v-if="isRoot"
+            v-if="!isPosts"
           >
             <span class="mr-2">{{ post.author }}</span>
             <ProfileImage class="w-7 h-7" :url="post.authorImage" />
@@ -147,7 +147,7 @@ export default defineComponent({
       console.log('listFavorites', posts.value)
     }
     const path = ref(root.$route.path)
-    const isRoot = ref(path.value === '/')
+    const isPosts = ref(path.value === '/posts')
     switch (path.value) {
       case '/':
         listPosts()
@@ -172,7 +172,7 @@ export default defineComponent({
     return {
       posts,
       categoryColor,
-      isRoot,
+      isPosts,
     }
   },
 })
