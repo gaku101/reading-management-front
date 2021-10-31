@@ -14,7 +14,7 @@
             <div v-if="!isEditing" class="text-gray-500">
               <span>Category:&nbsp;</span>
               <span
-                v-if="post.category.id"
+                v-if="category.id"
                 class="
                   mt-4
                   px-2
@@ -26,8 +26,8 @@
                   tracking-wide
                   text-xs
                 "
-                :class="categoryColor(post.category.id)"
-                >{{ post.category.name }}</span
+                :class="categoryColor(category.id)"
+                >{{ category.name }}</span
               >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -139,8 +139,8 @@
               type="text"
               inputmode="numeric"
               autofocus
-              @blur="updatePost"
-              @keyup.enter="updatePost"
+              @blur="updatePageRead"
+              @keyup.enter="updatePageRead"
               @click="removeZero"
             />
             <div>&nbsp;/&nbsp;</div>
@@ -177,7 +177,6 @@ import { categoryColor } from '~/utils/useCategoryColor'
 import { removeZero } from '~/utils/useNumber'
 import useValidationRules from '@/utils/useValidation'
 
-
 export default defineComponent({
   name: 'Post',
   setup(_, { root, emit }) {
@@ -187,7 +186,7 @@ export default defineComponent({
     const selectedCategory = ref(0)
     watch(selectedCategory, () => {
       console.debug('selectedCategory', selectedCategory.value)
-      updatePost()
+      updateCategory()
     })
     const postId = parseInt(root.$route.params.postId)
     const post: Post = reactive({
@@ -204,15 +203,20 @@ export default defineComponent({
       bookImage: '',
       bookPage: 0,
       bookPageRead: 0,
-      favorites:0,
-      commentsNum: 0
+      favorites: 0,
+      commentsNum: 0,
+    })
+    const category = reactive({
+      id: 0,
+      name: '',
     })
     const getPost = async () => {
       try {
         const { data } = await $axios.get(`/api/posts/${postId}`)
         console.log('getPost', data)
-        Object.assign(post, data)
-        selectedCategory.value = data.category.id
+        Object.assign(post, data.post)
+        Object.assign(category, data.category)
+        selectedCategory.value = data.post.category.id
         console.log('selectedCategory', selectedCategory.value)
         emit('get-author', data.author)
       } catch (e) {
@@ -225,12 +229,23 @@ export default defineComponent({
     const openEditor = () => {
       isEditing.value = true
     }
-    const updatePost = async () => {
+    const updateCategory = async () => {
+      try {
+        const { data } = await $axios.put('/api/post-category', {
+          postId: postId,
+          categoryId: selectedCategory.value,
+        })
+        console.log('updateCategory', data)
+        isEditing.value = false
+        Object.assign(category, data)
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    const updatePageRead = async () => {
       if (!validation.value) {
         post.bookPageRead = stashedPageRead.value
         pageValidation.value = ''
-        isEditing.value = false
-        isEditingPage.value = false
         return
       }
       try {
@@ -241,10 +256,8 @@ export default defineComponent({
           id: postId,
           author: username.value,
           BookPageRead: post?.bookPageRead || 0,
-          categoryId: selectedCategory.value,
         })
         console.log('data', data)
-        isEditing.value = false
         isEditingPage.value = false
         Object.assign(post?.category, data.category)
       } catch (e) {
@@ -317,11 +330,11 @@ export default defineComponent({
     }
     return {
       post,
+      category,
       categoryColor,
       openEditor,
       isEditing,
       selectedCategory,
-      updatePost,
       cancelEditing,
       isLoginedUser,
       addFavorite,
@@ -333,7 +346,8 @@ export default defineComponent({
       isEditingPage,
       removeZero,
       pageValidation,
-      updatePage
+      updatePage,
+      updatePageRead,
     }
   },
 })
