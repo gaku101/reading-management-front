@@ -232,7 +232,7 @@ export default defineComponent({
     const updateCategory = async () => {
       try {
         const { data } = await $axios.put('/api/post-category', {
-          postId: postId,
+          postId,
           categoryId: selectedCategory.value,
         })
         console.log('updateCategory', data)
