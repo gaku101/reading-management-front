@@ -95,10 +95,10 @@
             >
               <div class="py-1">
                 <NuxtLink
-                  to="/profile"
+                  to="/account"
                   class="text-gray-700 block px-4 py-2 text-sm"
                   id="menu-item-0"
-                  >Profile</NuxtLink
+                  >Account</NuxtLink
                 >
                 <NuxtLink
                   to="/sign-in"
