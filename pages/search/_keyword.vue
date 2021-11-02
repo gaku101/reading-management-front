@@ -104,9 +104,12 @@ export default defineComponent({
           bookPage: selectedBook.value.totalPage || 0,
           categoryId: 0,
         })
+        if (data.entry.amount) {
+          await store.dispatch('entry/setEntry', data.entry)
+        }
         console.debug('createPost', data)
         router.push({
-          path: `/${data.id}`,
+          path: `/${data.post.id}`,
         })
         isOpenedConfirm.value = false
       } catch (e) {

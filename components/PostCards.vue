@@ -3,7 +3,7 @@
     <div
       v-for="post in posts"
       :key="post.id"
-      class="w-full sm:w-1/2 md:w-1/4 xl:w-1/4 px-4"
+      class="w-full mb-2 sm:w-1/2 md:w-1/3 xl:w-1/4 px-4"
     >
       <NuxtLink
         :to="`/${post.id}`"

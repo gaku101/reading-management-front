@@ -3,82 +3,84 @@
     <div v-if="notes" class="col-start-2 col-span-10 mt-8">
       <div class="text-xl text-center py-2">Notes</div>
       <hr />
-      <textarea
-        rows="3"
-        class="block w-full bg-gray mt-8 leading-9 text-lg"
-        placeholder="Write note here..."
-        v-model="note"
-      ></textarea>
-      <div class="flex place-items-center mt-2">
-        <div>
-          <input
-            v-model="page"
+      <template v-if="isAuthor">
+        <textarea
+          rows="3"
+          class="block w-full bg-gray mt-8 leading-9 text-lg"
+          placeholder="Write note here..."
+          v-model="note"
+        ></textarea>
+        <div class="flex place-items-center mt-2">
+          <div>
+            <input
+              v-model="page"
+              class="
+                border-2 border-gray-300
+                bg-white
+                h-10
+                pr-2
+                rounded-lg
+                text-sm
+                focus:outline-none
+                text-right
+              "
+              size="5"
+              name="page"
+              placeholder="page"
+              type="text"
+              inputmode="numeric"
+              @click="removeZero"
+            />
+            <span class="ml-1">ページ</span>
+            <input
+              v-model="line"
+              class="
+                border-2 border-gray-300
+                bg-white
+                h-10
+                ml-4
+                pr-2
+                rounded-lg
+                text-sm
+                focus:outline-none
+                text-right
+              "
+              size="5"
+              name="line"
+              placeholder="line"
+              type="text"
+              inputmode="numeric"
+              @click="removeZero"
+            />
+            <span class="ml-1">行</span>
+          </div>
+          <button
+            type="button"
             class="
-              border-2 border-gray-300
-              bg-white
-              h-10
-              pr-2
-              rounded-lg
-              text-sm
+              block
+              rounded-md
+              border border-transparent
+              shadow-sm
+              px-4
+              py-2
+              bg-blue-500
+              font-medium
+              text-white
+              hover:bg-blue-600
               focus:outline-none
-              text-right
+              focus:ring-2
+              focus:ring-offset-2
+              focus:ring-red-500
+              sm:w-auto sm:text-sm
+              ml-auto
             "
-            size="5"
-            name="page"
-            placeholder="page"
-            type="text"
-            inputmode="numeric"
-            @click="removeZero"
-          />
-          <span class="ml-1">ページ</span>
-          <input
-            v-model="line"
-            class="
-              border-2 border-gray-300
-              bg-white
-              h-10
-              ml-4
-              pr-2
-              rounded-lg
-              text-sm
-              focus:outline-none
-              text-right
-            "
-            size="5"
-            name="line"
-            placeholder="line"
-            type="text"
-            inputmode="numeric"
-            @click="removeZero"
-          />
-          <span class="ml-1">行</span>
+            :disabled="createValidation"
+            @click="createNote"
+          >
+            Send
+          </button>
         </div>
-        <button
-          type="button"
-          class="
-            block
-            rounded-md
-            border border-transparent
-            shadow-sm
-            px-4
-            py-2
-            bg-blue-500
-            font-medium
-            text-white
-            hover:bg-blue-600
-            focus:outline-none
-            focus:ring-2
-            focus:ring-offset-2
-            focus:ring-red-500
-            sm:w-auto sm:text-sm
-            ml-auto
-          "
-          :disabled="createValidation"
-          @click="createNote"
-        >
-          Send
-        </button>
-      </div>
+      </template>
       <span class="text-red-400 text-xs"
         >{{ notePageValidation }}&nbsp;&nbsp;</span
       >
@@ -214,36 +216,38 @@
             </button>
           </div>
           <div v-else class="flex">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6 inline-block text-blue-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              @click="openEditor(note)"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-              />
-            </svg>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6 inline-block ml-4 text-gray-500"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              @click="openConfirm(note.id)"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-              />
-            </svg>
+            <template v-if="isAuthor">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 inline-block text-blue-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                @click="openEditor(note)"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                />
+              </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 inline-block ml-4 text-gray-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                @click="openConfirm(note.id)"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
+              </svg>
+            </template>
           </div>
         </div>
         <div v-if="isEditing && note.id == selectedNote.id">
@@ -276,11 +280,11 @@ import {
 import { removeZero } from '~/utils/useNumber'
 import useValidationRules from '@/utils/useValidation'
 
-
 export default defineComponent({
   name: 'Notes',
   setup() {
-    const { params, $axios } = useContext()
+    const { params, $axios, store } = useContext()
+    const user = computed(() => store.getters['user/user'])
     const isEditing = ref(false)
     const openEditor = (note: any) => {
       Object.assign(selectedNote, note)
@@ -305,6 +309,19 @@ export default defineComponent({
       }
     }
     listNotes()
+    const getPost = async () => {
+      try {
+        const { data } = await $axios.get(`/api/posts/${postId}`)
+        author.value = data.post.author
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    getPost()
+    const author = ref('')
+    const isAuthor = computed(() => {
+      return user.value.username === author.value
+    })
     const isOpenedConfirm = ref(false)
     const selectedNote = reactive({ id: 0, body: '', page: '', line: '' })
     const selectedNoteId = ref(0)
@@ -416,10 +433,16 @@ export default defineComponent({
       if (!selectedNote.body) {
         console.log('some userInfo not set')
         return true
-      } else if ((selectedNote.page || selectedNote.line) && !validation.value) {
+      } else if (
+        (selectedNote.page || selectedNote.line) &&
+        !validation.value
+      ) {
         console.log('passed validation')
         return true
-      } else if (notePageUpdateValidation.value || noteLineUpdateValidation.value) {
+      } else if (
+        notePageUpdateValidation.value ||
+        noteLineUpdateValidation.value
+      ) {
         return true
       } else if (!selectedNote.page && selectedNote.line) {
         return true
@@ -448,7 +471,8 @@ export default defineComponent({
       notePageUpdateValidation,
       noteLineUpdateValidation,
       createValidation,
-      updateValidation
+      updateValidation,
+      isAuthor,
     }
   },
 })
