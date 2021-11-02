@@ -171,6 +171,7 @@ import {
   reactive,
   ref,
   useContext,
+  useRouter,
   watch,
 } from '@nuxtjs/composition-api'
 import { categoryColor } from '~/utils/useCategoryColor'
@@ -179,8 +180,9 @@ import useValidationRules from '@/utils/useValidation'
 
 export default defineComponent({
   name: 'Post',
-  setup(_, { root, emit }) {
-    const { store, $axios } = useContext()
+  setup() {
+    const { store, $axios, params } = useContext()
+    const router = useRouter()
     const username = computed(() => store.getters['user/username'])
     const user = computed(() => store.getters['user/user'])
     const selectedCategory = ref(0)
@@ -188,7 +190,7 @@ export default defineComponent({
       console.debug('selectedCategory', selectedCategory.value)
       updateCategory()
     })
-    const postId = parseInt(root.$route.params.postId)
+    const postId = parseInt(params.value.postId)
     const post: Post = reactive({
       id: 0,
       author: '',
@@ -218,7 +220,6 @@ export default defineComponent({
         Object.assign(category, data.category)
         selectedCategory.value = data.post.category.id
         console.log('selectedCategory', selectedCategory.value)
-        emit('get-author', data.author)
       } catch (e) {
         console.error(e)
       }
@@ -309,7 +310,7 @@ export default defineComponent({
       try {
         const { data } = await $axios.delete(`/api/posts/${postId}`)
         console.log('deletePost', data)
-        root.$router.push('/')
+        router.push('/')
       } catch (e) {
         console.error(e)
       }

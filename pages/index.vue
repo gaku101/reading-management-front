@@ -7,8 +7,8 @@
       <PostCards />
       <transition>
         <NotificationDialog
-          :is-opened="isOpenedConfirm"
-          :ok-action="() => (isOpenedConfirm = false)"
+          :is-opened="isOpenedNotification"
+          :ok-action="() => (isOpenedNotification = false)"
         >
           <template v-slot:title>Login Bonus &#127881; </template>
           <template v-slot:body>
@@ -49,18 +49,18 @@ export default defineComponent({
   setup() {
     const { store } = useContext()
     const entry = computed(() => store.getters['entry/entry'])
-    const isOpenedConfirm = ref(false)
+    const isOpenedNotification = ref(false)
     const openConfirm = () => {
-      isOpenedConfirm.value = true
+      isOpenedNotification.value = true
     }
     onMounted(() => {
       if (entry.value.amount) {
-        isOpenedConfirm.value = true
+        isOpenedNotification.value = true
       }
     })
     return {
       entry,
-      isOpenedConfirm,
+      isOpenedNotification,
       openConfirm,
     }
   },
