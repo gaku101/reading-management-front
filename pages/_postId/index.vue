@@ -23,7 +23,6 @@ import {
   computed,
   defineComponent,
   onMounted,
-  reactive,
   ref,
   useContext,
 } from '@nuxtjs/composition-api'
@@ -46,7 +45,6 @@ export default defineComponent({
   },
   setup() {
     const { store, $axios, params } = useContext()
-    const user = computed(() => store.getters['user/user'])
     const isOpenedNotification = ref(false)
     const entry = computed(() => store.getters['entry/entry'])
     onMounted(() => {
