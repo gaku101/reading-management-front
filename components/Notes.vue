@@ -272,6 +272,7 @@
 import {
   computed,
   defineComponent,
+  PropType,
   reactive,
   ref,
   useContext,
@@ -282,7 +283,13 @@ import useValidationRules from '@/utils/useValidation'
 
 export default defineComponent({
   name: 'Notes',
-  setup() {
+  props: {
+    postProp: {
+      type: Object as PropType<Post>,
+      required: true,
+    },
+  },
+  setup(props) {
     const { params, $axios, store } = useContext()
     const user = computed(() => store.getters['user/user'])
     const isEditing = ref(false)
@@ -309,18 +316,8 @@ export default defineComponent({
       }
     }
     listNotes()
-    const getPost = async () => {
-      try {
-        const { data } = await $axios.get(`/api/posts/${postId}`)
-        author.value = data.post.author
-      } catch (e) {
-        console.error(e)
-      }
-    }
-    getPost()
-    const author = ref('')
     const isAuthor = computed(() => {
-      return user.value.username === author.value
+      return user.value.username === props.postProp.author
     })
     const isOpenedConfirm = ref(false)
     const selectedNote = reactive({ id: 0, body: '', page: '', line: '' })
