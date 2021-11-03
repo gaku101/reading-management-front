@@ -38,7 +38,7 @@
           <hr />
         </div>
       </template>
-      <template v-if="!isPostAuthor">
+      <template v-if="!isAuthor">
         <ProfileImage :url="user.image" class="w-10 h-10 mt-2" />
         <textarea
           rows="5"
@@ -61,9 +61,10 @@
             text-white
             hover:bg-blue-600
             focus:outline-none
-            focus:ring-2 focus:ring-offset-2 focus:ring-red-500
-            sm:w-auto
-            sm:text-sm
+            focus:ring-2
+            focus:ring-offset-2
+            focus:ring-red-500
+            sm:w-auto sm:text-sm
             ml-auto
             mt-2
           "
@@ -82,12 +83,23 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref, useContext } from '@nuxtjs/composition-api'
-
+import {
+  computed,
+  defineComponent,
+  PropType,
+  ref,
+  useContext,
+} from '@nuxtjs/composition-api'
 
 export default defineComponent({
   name: 'Comments',
-  setup() {
+  props: {
+    postProp: {
+      type: Object as PropType<Post>,
+      required: true,
+    },
+  },
+  setup(props) {
     const { store, params, $axios } = useContext()
     const user = computed(() => store.getters['user/user'])
     const comment = ref('')
@@ -120,14 +132,6 @@ export default defineComponent({
         console.error(e)
       }
     }
-    const isPostAuthor = ref(false)
-    const getPost = async () => {
-      const { data } = await $axios.get(`/api/posts/${postId}`)
-      console.log('getPost', data)
-      isPostAuthor.value = user.value.username === data.author
-      console.log('isPostAuthor', isPostAuthor.value)
-    }
-    getPost()
     const selectedComment = ref(0)
     const isOpenedConfirm = ref(false)
     const openConfirm = (commentId: number) => {
@@ -151,12 +155,15 @@ export default defineComponent({
       isOpenedConfirm.value = false
       selectedComment.value = 0
     }
+    const isAuthor = computed(() => {
+      return user.value.username === props.postProp.author
+    })
     return {
       user,
       comment,
       comments,
       createComment,
-      isPostAuthor,
+      isAuthor,
       isOpenedConfirm,
       openConfirm,
       deleteComment,

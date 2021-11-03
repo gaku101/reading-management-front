@@ -168,6 +168,7 @@
 import {
   computed,
   defineComponent,
+  PropType,
   reactive,
   ref,
   useContext,
@@ -180,51 +181,30 @@ import useValidationRules from '@/utils/useValidation'
 
 export default defineComponent({
   name: 'Post',
-  setup() {
+  props: {
+    postProp: {
+      type: Object as PropType<Post>,
+      required: true,
+    },
+    categoryProp: {
+      type: Object as PropType<Category>,
+      required: true,
+    },
+  },
+  setup(props) {
     const { store, $axios, params } = useContext()
     const router = useRouter()
     const username = computed(() => store.getters['user/username'])
     const user = computed(() => store.getters['user/user'])
-    const selectedCategory = ref(0)
+
+    const postId = parseInt(params.value.postId)
+    const post: Post = reactive(props.postProp)
+    const category: Category = reactive(props.categoryProp)
+    const selectedCategory = ref(category.id)
     watch(selectedCategory, () => {
       console.debug('selectedCategory', selectedCategory.value)
       updateCategory()
     })
-    const postId = parseInt(params.value.postId)
-    const post: Post = reactive({
-      id: 0,
-      author: '',
-      authorImage: '',
-      title: '',
-      created_at: '',
-      category: {
-        id: 0,
-        name: '',
-      },
-      bookAuthor: '',
-      bookImage: '',
-      bookPage: 0,
-      bookPageRead: 0,
-      favorites: 0,
-      commentsNum: 0,
-    })
-    const category = reactive({
-      id: 0,
-      name: '',
-    })
-    const getPost = async () => {
-      try {
-        const { data } = await $axios.get(`/api/posts/${postId}`)
-        console.log('getPost', data)
-        Object.assign(post, data.post)
-        Object.assign(category, data.category)
-        selectedCategory.value = data.post.category.id
-        console.log('selectedCategory', selectedCategory.value)
-      } catch (e) {
-        console.error(e)
-      }
-    }
-    getPost()
     const isLoginedUser = computed(() => username.value === post!.author)
     const isEditing = ref(false)
     const openEditor = () => {

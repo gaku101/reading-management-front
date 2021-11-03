@@ -28,3 +28,7 @@ declare interface Post {
   favorites: number
   commentsNum: number
 }
+declare interface Category {
+  id: number
+  name: string
+}

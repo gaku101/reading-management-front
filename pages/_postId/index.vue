@@ -1,8 +1,8 @@
 <template>
   <div class="h-screen">
-    <Post />
-    <Notes />
-    <Comments />
+    <Post :post-prop="post" :category-prop="category" />
+    <Notes :post-prop="post" />
+    <Comments :post-prop="post" />
     <transition>
       <NotificationDialog
         :is-opened="isOpenedNotification"
@@ -23,6 +23,7 @@ import {
   computed,
   defineComponent,
   onMounted,
+  reactive,
   ref,
   useContext,
 } from '@nuxtjs/composition-api'
@@ -54,11 +55,33 @@ export default defineComponent({
       }
     })
     const postId = parseInt(params.value.postId)
-
+    const post: Post = reactive({
+      id: 0,
+      author: '',
+      authorImage: '',
+      title: '',
+      created_at: '',
+      category: {
+        id: 0,
+        name: '',
+      },
+      bookAuthor: '',
+      bookImage: '',
+      bookPage: 0,
+      bookPageRead: 0,
+      favorites: 0,
+      commentsNum: 0,
+    })
+    const category = reactive({
+      id: 0,
+      name: '',
+    })
     const getPost = async () => {
       try {
         const { data } = await $axios.get(`/api/posts/${postId}`)
         console.log('getPost', data)
+        Object.assign(post, data.post)
+        Object.assign(category, data.category)
       } catch (e) {
         console.error(e)
       }
@@ -67,6 +90,8 @@ export default defineComponent({
     return {
       isOpenedNotification,
       entry,
+      post,
+      category
     }
   },
 })
