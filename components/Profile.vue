@@ -71,7 +71,7 @@
       Edit Profile
     </button>
     <div class="col-span-3 mt-6 text-md text-blue-400">
-      Newbie&nbsp;&nbsp;|&nbsp;&nbsp;{{ user.points }} points
+      {{ badge }}&nbsp;&nbsp;|&nbsp;&nbsp;{{ user.points }} points
     </div>
     <button
       class="
@@ -136,7 +136,18 @@ export default defineComponent({
     const router = useRouter()
     const user = computed(() => store.getters['user/user'])
     const username = computed(() => store.getters['user/username'])
-
+    const badge = ref('')
+    const getUserBadge = async () => {
+      try {
+        const { data } = await $axios.get(
+          `/api/user-badge/${user.value.username}`
+        )
+        badge.value = data.name
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    getUserBadge()
     const isOpenedEditProfile = ref(false)
 
     const isShowedEditAvatar = ref(false)
@@ -190,6 +201,7 @@ export default defineComponent({
       editAvatar,
       isOpenedConfirm,
       deleteUser,
+      badge,
     }
   },
 })
