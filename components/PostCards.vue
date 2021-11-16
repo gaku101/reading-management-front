@@ -48,7 +48,7 @@
         </div>
         <div class="flex grid grid-cols-12 mt-4">
           <img
-            :src="post.bookImage ? post.bookImage : '../assets/no-image.png'"
+            :src="post.book_image ? post.book_image : '../assets/no-image.png'"
             alt="postImage"
             class="col-span-3 h-24 md:h-16"
           />

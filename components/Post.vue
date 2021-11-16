@@ -4,7 +4,7 @@
       <div class="grid grid-cols-12 flex">
         <div class="col-span-2">
           <img
-            :src="post.bookImage ? post.bookImage : '../assets/no-image.png'"
+            :src="post.book_image ? post.book_image : '../assets/no-image.png'"
             alt="postImage"
             class="w-full"
           />
@@ -109,7 +109,7 @@
             {{ post.title }}
           </div>
           <div class="text-2xl text-red-400 mt-2">
-            {{ post.bookAuthor }}
+            {{ post.book_author }}
           </div>
           <div class="row-start-5 flex place-items-center text-lg">
             <div
@@ -117,12 +117,12 @@
               class="hover:opacity-50"
               @click="updatePage"
             >
-              <span class="text-gray-500">{{ post.bookPageRead }}</span>
+              <span class="text-gray-500">{{ post.book_page_read }}</span>
               &nbsp;page
             </div>
             <input
               v-else
-              v-model="post.bookPageRead"
+              v-model="post.book_page_read"
               class="
                 border-2 border-gray-300
                 bg-white
@@ -145,7 +145,7 @@
             />
             <div>&nbsp;/&nbsp;</div>
             <div>
-              <span class="text-blue-700">{{ post.bookPage }}</span>
+              <span class="text-blue-700">{{ post.book_page }}</span>
               &nbsp;page
             </div>
           </div>
@@ -225,18 +225,18 @@ export default defineComponent({
     }
     const updatePageRead = async () => {
       if (!validation.value) {
-        post.bookPageRead = stashedPageRead.value
+        post.book_page_read = stashedPageRead.value
         pageValidation.value = ''
         return
       }
       try {
-        if (typeof post?.bookPageRead === 'string') {
-          post.bookPageRead = parseInt(post?.bookPageRead)
+        if (typeof post?.book_page_read === 'string') {
+          post.book_page_read = parseInt(post?.book_page_read)
         }
         const { data } = await $axios.put('/api/posts', {
           id: postId,
           author: username.value,
-          BookPageRead: post?.bookPageRead || 0,
+          BookPageRead: post?.book_page_read || 0,
         })
         console.log('data', data)
         isEditingPage.value = false
@@ -300,14 +300,14 @@ export default defineComponent({
     const pageValidation = ref('')
     const validation = ref(false)
     watch(
-      () => post.bookPageRead,
+      () => post.book_page_read,
       (v: number) =>
-        (validation.value = pageRules(String(v), post.bookPage, pageValidation))
+        (validation.value = pageRules(String(v), post.book_page, pageValidation))
     )
     const stashedPageRead = ref(0)
     const updatePage = () => {
       isEditingPage.value = true
-      stashedPageRead.value = post.bookPageRead
+      stashedPageRead.value = post.book_page_read
     }
     return {
       post,

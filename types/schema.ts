@@ -21,10 +21,10 @@ declare interface Post {
     id: number
     name: string
   }
-  bookAuthor: string
-  bookImage: string
-  bookPage: number
-  bookPageRead: number
+  book_author: string
+  book_image: string
+  book_page: number
+  book_page_read: number
   favorites: number
   commentsNum: number
 }

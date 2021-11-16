@@ -5,7 +5,7 @@
         class="flex items-center flex-shrink-0 text-white bg-red-500 px-4 mr-6"
       >
         <span class="font-semibold text-xl tracking-tight"
-          ><NuxtLink to="/" id="menu-item-0">My Portfolio</NuxtLink></span
+          ><NuxtLink to="/" id="menu-item-0">Reading Management</NuxtLink></span
         >
       </div>
       <div class="w-full block flex-grow flex items-center w-auto">

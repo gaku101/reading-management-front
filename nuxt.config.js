@@ -46,7 +46,7 @@ export default {
   axios: { proxy: true },
   proxy: {
     '/api/': {
-      target: 'http://localhost:8080',
+      target: 'http://api.reading-management.net',
       pathRewrite: {
         '^/api/': '/',
       },
