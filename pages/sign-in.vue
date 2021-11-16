@@ -129,7 +129,7 @@ export default defineComponent({
     const signIn = async () => {
       console.log('userInfo', userInfo.username, userInfo.password)
       try {
-        const { data } = await $axios.post('/api/users/login', {
+        const { data } = await $axios.post('http://api.reading-management.net/users/login', {
           username: userInfo.username,
           password: userInfo.password,
         })
