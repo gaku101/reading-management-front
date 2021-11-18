@@ -167,7 +167,7 @@ export default defineComponent({
       // API実行
       try {
         const { data } = await $axios.post(
-          `http://api.reading-management.net/images/${user.value.username}`,
+          `/api/images/${user.value.username}`,
           params,
           {
             headers: {
