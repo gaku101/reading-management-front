@@ -216,7 +216,7 @@ export default defineComponent({
           postId,
           categoryId: selectedCategory.value,
         })
-        console.log('updateCategory', data)
+        console.debug('updateCategory', data)
         isEditing.value = false
         Object.assign(category, data)
       } catch (e) {
@@ -238,7 +238,7 @@ export default defineComponent({
           author: username.value,
           BookPageRead: post?.book_page_read || 0,
         })
-        console.log('data', data)
+        console.debug('data', data)
         isEditingPage.value = false
         Object.assign(post?.category, data.category)
       } catch (e) {
@@ -252,7 +252,7 @@ export default defineComponent({
     const getFavorite = async () => {
       try {
         const { data } = await $axios.get(`/api/post-favorite/${postId}`)
-        console.log('getFavorite', data)
+        console.debug('getFavorite', data)
         if (!!data && data.user_id === user.value.id) isFavorite.value = true
       } catch (e) {
         console.error(e)
@@ -268,7 +268,7 @@ export default defineComponent({
           postId,
           userId: user.value.id,
         })
-        console.log('addFavorite', data)
+        console.debug('addFavorite', data)
         isFavorite.value = true
       } catch (e) {
         console.error(e)
@@ -289,7 +289,7 @@ export default defineComponent({
     const deletePost = async () => {
       try {
         const { data } = await $axios.delete(`/api/posts/${postId}`)
-        console.log('deletePost', data)
+        console.debug('deletePost', data)
         router.push('/')
       } catch (e) {
         console.error(e)

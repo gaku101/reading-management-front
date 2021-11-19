@@ -83,8 +83,8 @@ export default defineComponent({
             })
           }
           books.value = res
-          console.log('books', data)
-          console.log('books.value', books.value)
+          console.debug('books', data)
+          console.debug('books.value', books.value)
         })
     }
     search()

@@ -112,7 +112,7 @@ export default defineComponent({
         const { data } = await $axios.get(
           `/api/comments/${postId}?page_id=${pageId}&page_size=${pageSize}`
         )
-        console.log('listComments', data)
+        console.debug('listComments', data)
         comments.value = data
       } catch (e) {
         console.error(e)
@@ -125,7 +125,7 @@ export default defineComponent({
           postId,
           body: comment.value,
         })
-        console.log('createComment', data)
+        console.debug('createComment', data)
         comment.value = ''
         listComments()
       } catch (e) {
@@ -143,7 +143,7 @@ export default defineComponent({
         const data = await $axios.delete(
           `/api/comments/${selectedComment.value}`
         )
-        console.log('deletePost', data)
+        console.debug('deletePost', data)
         selectedComment.value = 0
         listComments()
         isOpenedConfirm.value = false

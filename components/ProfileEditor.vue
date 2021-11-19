@@ -175,15 +175,15 @@ export default defineComponent({
     })
     Object.assign(userInfo, props.user)
     const updateUser = async () => {
-      console.log('props.user', props.user)
-      console.log('userInfo', userInfo)
+      console.debug('props.user', props.user)
+      console.debug('userInfo', userInfo)
       try {
         const { data } = await $axios.put('/api/users', {
           id: props.user.id,
           username: props.user.username,
           profile: userInfo.profile,
         })
-        console.log('data', data)
+        console.debug('data', data)
         Object.assign(props.user, userInfo)
         props.cancelAction()
       } catch (e) {

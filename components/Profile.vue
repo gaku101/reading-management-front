@@ -153,17 +153,17 @@ export default defineComponent({
     const isShowedEditAvatar = ref(false)
     const uploadfile = ref('')
     const editAvatar = async (e: any) => {
-      console.log('editAvatar')
+      console.debug('editAvatar')
       const files = e.target.files || e.dataTransfer.files
       // ファイルが選択されたら変数に入れる
       uploadfile.value = files[0]
-      console.log('changeFile', uploadfile.value)
+      console.debug('changeFile', uploadfile.value)
 
       // パラメータ生成
       const params = new FormData()
       // FormDataにアップロードするファイルを設定
       params.append('file', uploadfile.value)
-      console.log('params', params)
+      console.debug('params', params)
       // API実行
       try {
         const { data } = await $axios.post(
@@ -176,7 +176,7 @@ export default defineComponent({
             },
           }
         )
-        console.log('regist', data)
+        console.debug('regist', data)
         location.reload()
       } catch (e) {
         console.error(e)

@@ -98,7 +98,7 @@ export default defineComponent({
           toUserId: props.toUserId,
           amount: points.value,
         })
-        console.log('sendPoints', data)
+        console.debug('sendPoints', data)
         emit('send-points', data.to_user.points)
         props.cancelAction()
       } catch (e) {
@@ -121,10 +121,10 @@ export default defineComponent({
     )
     const validate = computed(() => {
       if (!points.value) {
-        console.log('points not set')
+        console.debug('points not set')
         return true
       } else if (pointValidation.value) {
-        console.log('points not set')
+        console.debug('points not set')
         return true
       } else {
         return false

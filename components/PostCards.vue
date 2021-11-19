@@ -130,21 +130,21 @@ export default defineComponent({
           new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
       )
       posts.value = data
-      console.log('posts', posts.value)
+      console.debug('posts', posts.value)
     }
     const listPosts = async () => {
       const { data } = await $axios.get(
         `/api/posts/list?page_id=${pageId}&page_size=${pageSize}`
       )
       posts.value = data
-      console.log('posts', posts.value)
+      console.debug('posts', posts.value)
     }
     const listFavorites = async () => {
       const { data } = await $axios.get(
         `/api/post-favorite/list/${user.value.id}?page_id=${pageId}&page_size=${pageSize}`
       )
       posts.value = data
-      console.log('listFavorites', posts.value)
+      console.debug('listFavorites', posts.value)
     }
     const path = ref(root.$route.path)
     const isPosts = ref(path.value === '/posts')
