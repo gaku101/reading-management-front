@@ -31,11 +31,11 @@ import {
 export default defineComponent({
   name: 'PostId',
   beforeRouteEnter(to, from, next) {
-    console.log('to', to)
-    console.log('from', from)
+    console.debug('to', to)
+    console.debug('from', from)
 
     next(async (vm) => {
-      console.log('vm', vm)
+      console.debug('vm', vm)
 
       if (from.name !== 'search-keyword') {
         await vm.$store.dispatch('entry/setEntry', { id: 0, amount: 0 })
@@ -79,7 +79,7 @@ export default defineComponent({
     const getPost = async () => {
       try {
         const { data } = await $axios.get(`/api/posts/${postId}`)
-        console.log('getPost', data)
+        console.debug('getPost', data)
         Object.assign(post, data.post)
         Object.assign(category, data.category)
       } catch (e) {

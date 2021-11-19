@@ -34,7 +34,7 @@ export default defineComponent({
           `/api/follow?page_id=${pageId}&page_size=${pageSize}`
         )
         users.value = data
-        console.log('listFollowingUsers', users.value)
+        console.debug('listFollowingUsers', users.value)
       } catch (e) {
         console.error(e)
       }

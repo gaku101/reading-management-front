@@ -33,11 +33,11 @@ import {
 export default defineComponent({
   name: 'Index',
   beforeRouteEnter(to, from, next) {
-    console.log('to', to)
-    console.log('from', from)
+    console.debug('to', to)
+    console.debug('from', from)
 
     next(async (vm) => {
-      console.log('vm', vm)
+      console.debug('vm', vm)
 
       if (from.name !== 'sign-in') {
         await vm.$store.dispatch('entry/setEntry', { id: 0, amount: 0 })

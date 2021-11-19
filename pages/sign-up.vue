@@ -214,7 +214,7 @@ export default defineComponent({
         !userInfo.password ||
         !userInfo.passwordConfirm
       ) {
-        console.log('some userInfo not set')
+        console.debug('some userInfo not set')
         return true
       } else if (
         !usernameValidation.value &&
@@ -223,10 +223,10 @@ export default defineComponent({
         !passwordConfirmValidation.value &&
         validation.value
       ) {
-        console.log('passed validation')
+        console.debug('passed validation')
         return false
       } else {
-        console.log('not passed validation', validation.value)
+        console.debug('not passed validation', validation.value)
         return true
       }
     })
@@ -265,7 +265,7 @@ export default defineComponent({
           image:
             'https://eitrawmaterials.eu/wp-content/uploads/2016/09/person-icon.png',
         })
-        console.log('signUp', data)
+        console.debug('signUp', data)
         signIn()
       } catch (e: any) {
         const { data } = e.response
