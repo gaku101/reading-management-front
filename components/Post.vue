@@ -290,7 +290,7 @@ export default defineComponent({
       try {
         const { data } = await $axios.delete(`/api/posts/${postId}`)
         console.debug('deletePost', data)
-        router.push('/')
+        router.push('/posts')
       } catch (e) {
         console.error(e)
       }
