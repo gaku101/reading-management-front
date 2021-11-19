@@ -309,10 +309,10 @@ export default defineComponent({
       isEditingPage.value = true
       stashedPageRead.value = post.book_page_read
     }
+
     return {
       post,
       category,
-      categoryColor,
       openEditor,
       isEditing,
       selectedCategory,
@@ -329,6 +329,7 @@ export default defineComponent({
       pageValidation,
       updatePage,
       updatePageRead,
+      categoryColor
     }
   },
 })
