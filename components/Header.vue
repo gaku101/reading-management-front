@@ -124,6 +124,7 @@ export default defineComponent({
       router.push({
         path: `/search/${keyword.value}`,
       })
+      keyword.value = ""
     }
     return {
       username,

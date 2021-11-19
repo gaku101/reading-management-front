@@ -142,6 +142,7 @@ export default defineComponent({
         const { data } = await $axios.get(
           `/api/user-badge/${user.value.username}`
         )
+        console.debug('getUserBadge', badge.value)
         badge.value = data.name
       } catch (e) {
         console.error(e)
