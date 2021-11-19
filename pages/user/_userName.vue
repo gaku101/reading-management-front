@@ -116,7 +116,7 @@ export default defineComponent({
         const { data } = await $axios.post('/api/follow', {
           followingId: user.id,
         })
-        console.log('followUser', data)
+        console.debug('followUser', data)
         isFollow.value = true
       } catch (e) {
         console.error(e)
@@ -125,7 +125,7 @@ export default defineComponent({
     const getFollow = async () => {
       try {
         const { data } = await $axios.get(`/api/follow/${user.id}`)
-        console.log('getFollow', data)
+        console.debug('getFollow', data)
         if (data) isFollow.value = true
       } catch (e) {
         console.error(e)
@@ -134,7 +134,7 @@ export default defineComponent({
     const unfollowUser = async () => {
       try {
         const data = await $axios.delete(`/api/follow/${user.id}`)
-        console.log('unfollowUser', data)
+        console.debug('unfollowUser', data)
         isFollow.value = false
       } catch (e) {
         console.error(e)

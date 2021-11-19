@@ -309,7 +309,7 @@ export default defineComponent({
         const { data } = await $axios.get(
           `/api/notes/${postId}?page_id=${pageId}&page_size=${pageSize}`
         )
-        console.log('listNotes', data)
+        console.debug('listNotes', data)
         notes.value = data
       } catch (e) {
         console.error(e)
@@ -335,7 +335,7 @@ export default defineComponent({
           page: parseInt(selectedNote.page),
           line: parseInt(selectedNote.line),
         })
-        console.log('updateNote', data)
+        console.debug('updateNote', data)
         isEditing.value = false
         notes.value.forEach((note: any) => {
           if (note.id === selectedNote.id) {
@@ -366,9 +366,9 @@ export default defineComponent({
           postId,
           body: note.value,
           page: parseInt(page.value),
-          line: parseInt(page.value),
+          line: parseInt(line.value),
         })
-        console.log('createComment', data)
+        console.debug('createComment', data)
         note.value = ''
         page.value = ''
         line.value = ''
@@ -413,10 +413,10 @@ export default defineComponent({
     )
     const createValidation = computed(() => {
       if (!note.value) {
-        console.log('some userInfo not set')
+        console.debug('some userInfo not set')
         return true
       } else if ((page.value || line.value) && !validation.value) {
-        console.log('passed validation')
+        console.debug('passed validation')
         return true
       } else if (notePageValidation.value || notePageValidation.value) {
         return true
@@ -428,13 +428,13 @@ export default defineComponent({
     })
     const updateValidation = computed(() => {
       if (!selectedNote.body) {
-        console.log('some userInfo not set')
+        console.debug('some userInfo not set')
         return true
       } else if (
         (selectedNote.page || selectedNote.line) &&
         !validation.value
       ) {
-        console.log('passed validation')
+        console.debug('passed validation')
         return true
       } else if (
         notePageUpdateValidation.value ||

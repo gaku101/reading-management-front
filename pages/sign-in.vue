@@ -127,13 +127,13 @@ export default defineComponent({
     /** signIn */
     const signInError = ref('')
     const signIn = async () => {
-      console.log('userInfo', userInfo.username, userInfo.password)
+      console.debug('userInfo', userInfo.username, userInfo.password)
       try {
         const { data } = await $axios.post('/api/users/login', {
           username: userInfo.username,
           password: userInfo.password,
         })
-        console.log('res', data)
+        console.debug('res', data)
         if (data.access_token) {
           await store.dispatch('user/setUser', data.user)
           localStorage.setItem('token', data.access_token)
@@ -164,17 +164,17 @@ export default defineComponent({
     )
     const validate = computed(() => {
       if (!userInfo.username || !userInfo.password) {
-        console.log('some userInfo not set')
+        console.debug('some userInfo not set')
         return true
       } else if (
         !usernameValidation.value &&
         !passwordValidation.value &&
         validation.value
       ) {
-        console.log('passed validation')
+        console.debug('passed validation')
         return false
       } else {
-        console.log('not passed validation', validation.value)
+        console.debug('not passed validation', validation.value)
         return true
       }
     })

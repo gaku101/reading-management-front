@@ -46,7 +46,7 @@ export default defineComponent({
         const { data } = await $axios.get(
           `/api/transfers/${user.value.id}?page_id=${pageId}&page_size=${pageSize}`
         )
-        console.log('getTransfers', data)
+        console.debug('getTransfers', data)
         transfers.value = data
       } catch (e) {
         console.error(e)

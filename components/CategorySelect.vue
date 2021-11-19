@@ -41,9 +41,9 @@ export default defineComponent({
       categories.value = data
     }
     listCategories()
-    console.log('categoryselect', props.value)
+    console.debug('categoryselect', props.value)
     const updateValue = (e: any) => {
-      console.log('updateValue', e.target.value)
+      console.debug('updateValue', e.target.value)
       emit('input', parseInt(e.target.value))
     }
     onMounted(() => {
