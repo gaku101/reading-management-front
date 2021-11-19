@@ -32,7 +32,22 @@
                 tracking-wide
                 text-xs
               "
-              :class="categoryColor(post.category.id)"
+              :class="{
+                'bg-yellow-200': post.category.id === 1,
+                'text-yellow-800': post.category.id === 1,
+                'bg-blue-200': post.category.id === 2,
+                'text-blue-800': post.category.id === 2,
+                'bg-red-200': post.category.id === 3,
+                'text-red-800': post.category.id === 3,
+                'bg-green-200': post.category.id === 4,
+                'text-green-800': post.category.id === 4,
+                'bg-indigo-200': post.category.id === 5,
+                'text-indigo-800': post.category.id === 5,
+                'bg-pink-200': post.category.id === 6,
+                'text-pink-800': post.category.id === 6,
+                'bg-gray-200': post.category.id === 7,
+                'text-gray-800': post.category.id === 7
+              }"
               >{{ post.category.name }}</span
             >
             <span v-else class="inline-block" />
@@ -104,8 +119,13 @@
 </template>
       
 <script lang="ts">
-import { computed, defineComponent, ref, useContext, watch } from '@nuxtjs/composition-api'
-import { categoryColor } from '~/utils/useCategoryColor'
+import {
+  computed,
+  defineComponent,
+  ref,
+  useContext,
+  watch,
+} from '@nuxtjs/composition-api'
 
 export default defineComponent({
   name: 'PostCards',
@@ -171,7 +191,6 @@ export default defineComponent({
     )
     return {
       posts,
-      categoryColor,
       isPosts,
     }
   },
