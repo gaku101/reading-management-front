@@ -2,7 +2,7 @@
   <div class="grid grid-cols-3 place-items-center mt-20">
     <div
       class="col-span-3 relative pb-3"
-      @mouseover="() => (isShowedEditAvatar = false)"
+      @mouseover="() => (isShowedEditAvatar = true)"
       @mouseleave="() => (isShowedEditAvatar = false)"
     >
       <ProfileImage :url="user.image" class="w-24 h-24" />
