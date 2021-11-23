@@ -10,7 +10,7 @@
       </div>
       <div class="block sm:hidden">
         <button
-          @click="toggle"
+          @click="toggleMenu"
           class="
             flex
             items-center
@@ -23,7 +23,7 @@
           "
         >
           <svg
-            v-if="!open"
+            v-if="!openMenu"
             xmlns="http://www.w3.org/2000/svg"
             class="h-6 w-6"
             fill="none"
@@ -55,7 +55,7 @@
         </button>
       </div>
       <div
-        :class="open ? 'block' : 'hidden'"
+        :class="openMenu ? 'block' : 'hidden'"
         class="w-full flex-grow sm:flex sm:items-center sm:w-auto"
       >
         <div class="text-sm sm:flex-grow">
@@ -100,7 +100,7 @@
           >
         </div>
         <div class="sm:flex place-items-center mt-4 sm:mt-0">
-          <div v-if="open" class="text-sm">
+          <div v-if="openMenu" class="text-sm">
             <NuxtLink
               to="/account"
               class="
@@ -135,7 +135,7 @@
             placeholder="search"
             class="mt-4 sm:mt-0"
           />
-          <div v-if="username" :class="open ? 'hidden' : ''" class="relative">
+          <div v-if="username" :class="openMenu ? 'hidden' : ''" class="relative">
             <ProfileImage
               class="w-10 h-10 mr-2"
               :url="user.image"
@@ -230,9 +230,9 @@ export default defineComponent({
       })
       keyword.value = ''
     }
-    const open = ref(false)
-    const toggle = () => {
-      open.value = !open.value
+    const openMenu = ref(false)
+    const toggleMenu = () => {
+      openMenu.value = !openMenu.value
     }
     return {
       username,
@@ -240,8 +240,8 @@ export default defineComponent({
       user,
       keyword,
       search,
-      open,
-      toggle,
+      openMenu,
+      toggleMenu,
     }
   },
 })
