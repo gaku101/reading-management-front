@@ -1,6 +1,6 @@
 <template>
-  <div class="grid grid-cols-12">
-    <nav class="col-start-2 col-span-10 flex items-center justify-between py-4">
+  <div class="font-sans antialiased" id="app">
+    <nav class="flex items-center justify-between flex-wrap bg-teal p-6">
       <div
         class="flex items-center flex-shrink-0 text-white bg-red-500 px-4 mr-6"
       >
@@ -8,30 +8,134 @@
           ><NuxtLink to="/" id="menu-item-0">Reading Management</NuxtLink></span
         >
       </div>
-      <div class="w-full block flex-grow flex items-center w-auto">
-        <div class="text-sm flex-grow">
+      <div class="block sm:hidden">
+        <button
+          @click="toggleMenu"
+          class="
+            flex
+            items-center
+            px-3
+            py-2
+            border
+            rounded
+            text-teal-lighter
+            border-teal-light
+          "
+        >
+          <svg
+            v-if="!openMenu"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+          <svg
+            v-else
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
+      <div
+        :class="openMenu ? 'block' : 'hidden'"
+        class="w-full flex-grow sm:flex sm:items-center sm:w-auto"
+      >
+        <div class="text-sm sm:flex-grow">
           <NuxtLink
-            class="inline-block hover:text-red-200 mr-4"
+            class="
+              block
+              mt-4
+              sm:inline-block sm:mt-0
+              text-teal-lighter
+              hover:opacity-50
+              mr-4
+            "
             to="/posts"
             id="menu-item-0"
             >My Posts</NuxtLink
           >
           <NuxtLink
-            class="inline-block hover:text-red-200 mr-4"
+            class="
+              block
+              mt-4
+              sm:inline-block sm:mt-0
+              text-teal-lighter
+              hover:opacity-50
+              mr-4
+            "
             to="/favorites"
             id="menu-item-0"
             >Favorites</NuxtLink
           >
           <NuxtLink
-            class="inline-block hover:text-red-200 mr-4"
+            class="
+              block
+              mt-4
+              sm:inline-block sm:mt-0
+              text-teal-lighter
+              hover:opacity-50
+              mr-4
+            "
             to="/following"
             id="menu-item-0"
             >Following</NuxtLink
           >
         </div>
-        <div class="flex place-items-center">
-          <SearchBox v-model="keyword" :search="search" placeholder="search" />
-          <div v-if="username" class="relative">
+        <div class="sm:flex place-items-center mt-4 sm:mt-0">
+          <div v-if="openMenu" class="text-sm">
+            <NuxtLink
+              to="/account"
+              class="
+                block
+                mt-4
+                sm:inline-block sm:mt-0
+                text-teal-lighter
+                hover:opacity-50
+                mr-4
+              "
+              id="menu-item-0"
+              >Account</NuxtLink
+            >
+            <NuxtLink
+              to="/sign-in"
+              class="
+                block
+                mt-4
+                sm:inline-block sm:mt-0
+                text-teal-lighter
+                hover:opacity-50
+                mr-4
+              "
+              id="menu-item-3"
+            >
+              Sign out
+            </NuxtLink>
+          </div>
+          <SearchBox
+            v-model="keyword"
+            :search="search"
+            placeholder="search"
+            class="mt-4 sm:mt-0"
+          />
+          <div v-if="username" :class="openMenu ? 'hidden' : ''" class="relative">
             <ProfileImage
               class="w-10 h-10 mr-2"
               :url="user.image"
@@ -124,7 +228,11 @@ export default defineComponent({
       router.push({
         path: `/search/${keyword.value}`,
       })
-      keyword.value = ""
+      keyword.value = ''
+    }
+    const openMenu = ref(false)
+    const toggleMenu = () => {
+      openMenu.value = !openMenu.value
     }
     return {
       username,
@@ -132,6 +240,8 @@ export default defineComponent({
       user,
       keyword,
       search,
+      openMenu,
+      toggleMenu,
     }
   },
 })
