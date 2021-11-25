@@ -5,7 +5,9 @@
       <div v-if="user.username" class="col-span-3 mt-6 text-2xl">
         {{ user.username }}
       </div>
-      <div v-if="user" class="col-span-3 mt-3 text-md">{{ user.profile }}</div>
+      <div v-if="user" class="col-span-3 mt-3 text-sm sm:text-md mx-2 sm:mx-0">
+        {{ user.profile }}
+      </div>
       <button
         v-if="!isFollow"
         class="

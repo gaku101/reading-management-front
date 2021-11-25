@@ -2,16 +2,31 @@
   <div class="grid grid-cols-12">
     <div v-if="post" class="col-start-2 col-span-10 mt-8">
       <div class="grid grid-cols-12 flex">
-        <div class="col-span-2">
+        <div class="sm:col-span-2 col-span-4">
           <img
             :src="post.book_image ? post.book_image : '../assets/no-image.png'"
             alt="postImage"
             class="w-full"
           />
         </div>
-        <div class="col-span-10 grid grid-rows-6 pl-6">
-          <div class="flex place-items-center justify-between mb-2">
-            <div v-if="!isEditing" class="text-gray-500">
+        <div class="sm:col-span-10 col-span-8 pl-6">
+          <div
+            class="
+              flex
+              grid grid-cols-12
+              place-items-center
+              justify-between
+              mb-2
+            "
+          >
+            <div
+              v-if="!isEditing"
+              class="
+                text-gray-500
+                col-span-12
+                sm:col-span-6 justify-self-start
+              "
+            >
               <span>Category:&nbsp;</span>
               <span
                 v-if="category.id"
@@ -30,6 +45,7 @@
                 >{{ category.name }}</span
               >
               <svg
+                v-if="isAuthor"
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-5 w-5 ml-1 inline-block text-blue-600"
                 fill="none"
@@ -45,7 +61,15 @@
                 />
               </svg>
             </div>
-            <div v-else class="flex place-items-center">
+            <div
+              v-else
+              class="
+                flex
+                place-items-center
+                col-span-12
+                sm:col-span-6 justify-self-start
+              "
+            >
               <CategorySelect v-model="selectedCategory" />
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -63,7 +87,17 @@
                 />
               </svg>
             </div>
-            <div class="flex place-items-center">
+            <div
+              class="
+                flex
+                place-items-center
+                col-span-12
+                justify-self-start
+                mt-1
+                sm:mt-0
+                sm:col-span-6 sm:justify-self-end
+              "
+            >
               <div class="text-gray-500 mr-4">
                 User:&nbsp;
                 <NuxtLink :to="`/user/${post.author}`" class="text-red-400">
@@ -71,7 +105,7 @@
                 </NuxtLink>
               </div>
               <svg
-                v-if="isLoginedUser"
+                v-if="isAuthor"
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-6 w-6 text-gray-600"
                 fill="none"
@@ -105,13 +139,13 @@
               </svg>
             </div>
           </div>
-          <div class="font-bold text-3xl text-gray-800">
+          <div class="font-bold sm:text-3xl text-gray-800">
             {{ post.title }}
           </div>
-          <div class="text-2xl text-red-400 mt-2">
+          <div class="sm:text-2xl text-red-400 mt-2">
             {{ post.book_author }}
           </div>
-          <div class="row-start-5 flex place-items-center text-lg">
+          <div class="flex place-items-center sm:text-lg sm:mt-5">
             <div
               v-if="!isEditingPage"
               class="hover:opacity-50"
@@ -149,7 +183,7 @@
               &nbsp;page
             </div>
           </div>
-          <div class="row-start-6 place-items-start text-red-400 text-xs">
+          <div class="place-items-start text-red-400 text-xs">
             {{ pageValidation }}
           </div>
         </div>
@@ -205,7 +239,7 @@ export default defineComponent({
       console.debug('selectedCategory', selectedCategory.value)
       updateCategory()
     })
-    const isLoginedUser = computed(() => username.value === post!.author)
+    const isAuthor = computed(() => username.value === post!.author)
     const isEditing = ref(false)
     const openEditor = () => {
       isEditing.value = true
@@ -302,10 +336,15 @@ export default defineComponent({
     watch(
       () => post.book_page_read,
       (v: number) =>
-        (validation.value = pageRules(String(v), post.book_page, pageValidation))
+        (validation.value = pageRules(
+          String(v),
+          post.book_page,
+          pageValidation
+        ))
     )
     const stashedPageRead = ref(0)
     const updatePage = () => {
+      if (!isAuthor.value) return
       isEditingPage.value = true
       stashedPageRead.value = post.book_page_read
     }
@@ -317,7 +356,7 @@ export default defineComponent({
       isEditing,
       selectedCategory,
       cancelEditing,
-      isLoginedUser,
+      isAuthor,
       addFavorite,
       isFavorite,
       openConfirm,
@@ -329,7 +368,7 @@ export default defineComponent({
       pageValidation,
       updatePage,
       updatePageRead,
-      categoryColor
+      categoryColor,
     }
   },
 })

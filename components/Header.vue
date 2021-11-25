@@ -23,7 +23,7 @@
           "
         >
           <svg
-            v-if="!openMenu"
+            v-if="!isOpenedMenu"
             xmlns="http://www.w3.org/2000/svg"
             class="h-6 w-6"
             fill="none"
@@ -55,7 +55,7 @@
         </button>
       </div>
       <div
-        :class="openMenu ? 'block' : 'hidden'"
+        :class="isOpenedMenu ? 'block' : 'hidden'"
         class="w-full flex-grow sm:flex sm:items-center sm:w-auto"
       >
         <div class="text-sm sm:flex-grow">
@@ -100,7 +100,7 @@
           >
         </div>
         <div class="sm:flex place-items-center mt-4 sm:mt-0">
-          <div v-if="openMenu" class="text-sm">
+          <div v-if="isOpenedMenu" class="text-sm">
             <NuxtLink
               to="/account"
               class="
@@ -135,7 +135,7 @@
             placeholder="search"
             class="mt-4 sm:mt-0"
           />
-          <div v-if="username" :class="openMenu ? 'hidden' : ''" class="relative">
+          <div v-if="username" :class="isOpenedMenu ? 'hidden' : ''" class="relative">
             <ProfileImage
               class="w-10 h-10 mr-2"
               :url="user.image"
@@ -221,6 +221,7 @@ export default defineComponent({
       () => {
         console.debug('route', route.value)
         dropDown.value = false
+        isOpenedMenu.value = false
       }
     )
     const keyword = ref('')
@@ -230,9 +231,9 @@ export default defineComponent({
       })
       keyword.value = ''
     }
-    const openMenu = ref(false)
+    const isOpenedMenu = ref(false)
     const toggleMenu = () => {
-      openMenu.value = !openMenu.value
+      isOpenedMenu.value = !isOpenedMenu.value
     }
     return {
       username,
@@ -240,7 +241,7 @@ export default defineComponent({
       user,
       keyword,
       search,
-      openMenu,
+      isOpenedMenu,
       toggleMenu,
     }
   },
