@@ -9,14 +9,14 @@
           class="grid grid-cols-12 flex bg-white hover:opacity-80"
           @click="selectBook(book)"
         >
-          <div class="sm:col-span-1 md:col-span-2 col-span-12 mx-auto p-1">
+          <div class="sm:col-span-2 md:col-span-1 col-span-12 mx-auto p-1">
             <img
               :src="book.image ? book.image : '../../assets/no-image.png'"
               alt="bookImage"
               class="h-32 md:h-28"
             />
           </div>
-          <div class="sm:col-span-11 md:col-span-10 col-span-12 p-2 pl-4">
+          <div class="sm:col-span-10 md:col-span-11 col-span-12 p-2 pl-4">
             <div class="text-lg text-red-400">{{ book.title }}</div>
             <div class="text-gray-500">{{ book.author }}</div>
             <div class="text-gray-400">
