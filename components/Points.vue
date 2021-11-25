@@ -5,7 +5,14 @@
       <div
         v-for="transfer in transfers"
         :key="transfer.id"
-        class="grid grid-cols-3 items-center mb-2"
+        class="
+          grid grid-cols-3
+          items-center
+          mb-2
+          mx-2
+          text-sm
+          sm:mx-0 sm:text-md
+        "
       >
         <div class="col-span-2">
           <NuxtLink
