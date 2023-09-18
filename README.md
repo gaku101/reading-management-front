@@ -1,6 +1,6 @@
-# myportfolio_front
-作成中の読書管理アプリのバックエンド用リポジトリになります。  
-バックエンドのコードはhttps://github.com/gaku101/my-portfolio からご確認頂けます。  
+# reading-management-front
+作成した読書管理アプリのフロントエンドです。  
+バックエンドのコードはhttps://github.com/gaku101/reading-management からご確認できます。  
 
 ### 主な機能
 - 読書記録の作成・閲覧・削除
